@@ -61,6 +61,23 @@ class UserRepositoryClass extends Repository<User> {
             },
         });
     }
+
+    async findPaginated(page: number, limit: number, name?: string, username?: string) {
+        const query = this.createQueryBuilder('user')
+            .select(['user.id', 'user.firstName', 'user.lastName', 'user.email', 'user.username'])
+            .skip((page - 1) * limit)
+            .take(limit)
+            .orderBy('user.id', 'ASC');
+
+        if (name)
+            query.andWhere(`CONCAT(user.firstName, ' ', user.lastName) ILIKE :name`, {
+                name: `%${name}%`,
+            });
+
+        if (username) query.orWhere(`user.username ILIKE :username`, { username: `%${username}%` });
+
+        return query.getManyAndCount();
+    }
 }
 
 export const UserRepository = new UserRepositoryClass();

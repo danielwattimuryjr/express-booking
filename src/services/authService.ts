@@ -2,11 +2,12 @@ import { NotFoundError, UnauthorizedError } from '../common/error';
 import { UserRepository } from '../repositories';
 import bcrypt from 'bcrypt';
 import { JwtService } from './jwtService';
-import { LoginRequest } from '../dto';
+import { LoginRequest, RegisterRequest } from '../dto';
 import { RefreshTokenRepository } from '../repositories/refreshTokenRepository';
 import { AppDataSource } from '../config/database';
 import { RefreshToken } from '../entitites';
 import { EntityManager } from 'typeorm';
+import { RoleEnum } from '../common/enum';
 
 export class AuthService {
     private static async createTokenPair(
@@ -62,5 +63,36 @@ export class AuthService {
 
             return this.createTokenPair(userId.toString());
         });
+    }
+
+    static async logout(token: string) {
+        const { jti, sub } = JwtService.verifyRefreshToken(token);
+        const userId = Number(sub);
+        const refreshToken = await RefreshTokenRepository.findByJtiAndUser(jti, userId);
+
+        if (!refreshToken) throw new UnauthorizedError();
+        if (refreshToken.revokedAt) throw new UnauthorizedError();
+        if (refreshToken.expiresAt <= new Date()) throw new UnauthorizedError();
+
+        await RefreshTokenRepository.update(
+            { jti, user: { id: userId } },
+            { revokedAt: new Date() },
+        );
+    }
+
+    static async register(body: RegisterRequest) {
+        const password = await bcrypt.hash(body.password, 12);
+
+        const user = UserRepository.create({
+            email: body.email,
+            firstName: body.firstName,
+            lastName: body.lastName,
+            username: body.username,
+            password,
+            roles: [{ name: RoleEnum.USER }],
+        });
+        await UserRepository.save(user);
+
+        return user;
     }
 }

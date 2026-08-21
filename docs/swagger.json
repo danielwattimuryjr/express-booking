@@ -7,6 +7,54 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"HttpResponse_GetAllUserResponse_": {
+				"$ref": "#/components/schemas/HttpResponse_GetAllUserResponse_"
+			},
+			"PaginationMetadata": {
+				"properties": {
+					"totalPages": {
+						"type": "number",
+						"format": "double"
+					},
+					"total": {
+						"type": "number",
+						"format": "double"
+					},
+					"limit": {
+						"type": "number",
+						"format": "double"
+					},
+					"page": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"totalPages",
+					"total",
+					"limit",
+					"page"
+				],
+				"type": "object"
+			},
+			"HttpPaginateResponse_GetAllUserResponse_": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/HttpResponse_GetAllUserResponse_"
+					},
+					{
+						"properties": {
+							"pagination": {
+								"$ref": "#/components/schemas/PaginationMetadata"
+							}
+						},
+						"required": [
+							"pagination"
+						],
+						"type": "object"
+					}
+				]
+			},
 			"StatusCodes": {
 				"enum": [
 					100,
@@ -118,12 +166,53 @@
 				],
 				"type": "object"
 			},
-			"infer_typeofuserSchema_": {
+			"infer_typeofcreateUserSchema_": {
 				"properties": {
 					"lastName": {
 						"type": "string"
 					},
+					"username": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
 					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"username",
+					"email",
+					"firstName",
+					"password"
+				],
+				"type": "object"
+			},
+			"CreateUserRequest": {
+				"$ref": "#/components/schemas/infer_typeofcreateUserSchema_"
+			},
+			"HttpResponse_undefined_": {
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/StatusCodes"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"code",
+					"message"
+				],
+				"type": "object"
+			},
+			"infer_typeofupdateUserSchema_": {
+				"properties": {
+					"lastName": {
 						"type": "string"
 					},
 					"username": {
@@ -137,15 +226,71 @@
 					}
 				},
 				"required": [
-					"password",
 					"username",
 					"email",
 					"firstName"
 				],
 				"type": "object"
 			},
-			"UserRequest": {
-				"$ref": "#/components/schemas/infer_typeofuserSchema_"
+			"UpdateUserRequest": {
+				"$ref": "#/components/schemas/infer_typeofupdateUserSchema_"
+			},
+			"AuthenticatedUser": {
+				"properties": {
+					"roles": {
+						"items": {
+							"properties": {
+								"permissions": {
+									"items": {
+										"properties": {
+											"name": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"name"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								},
+								"name": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"permissions",
+								"name"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"username": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"roles",
+					"username",
+					"lastName",
+					"firstName",
+					"email",
+					"id"
+				],
+				"type": "object"
 			},
 			"AuthResponse": {
 				"properties": {
@@ -199,6 +344,58 @@
 			},
 			"LoginRequest": {
 				"$ref": "#/components/schemas/infer_typeofloginSchema_"
+			},
+			"HttpResponse_RegisterResponse_": {
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/UserResponse"
+					},
+					"code": {
+						"$ref": "#/components/schemas/StatusCodes"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"data",
+					"code",
+					"message"
+				],
+				"type": "object"
+			},
+			"infer_typeofregisterSchema_": {
+				"properties": {
+					"lastName": {
+						"type": "string"
+					},
+					"confirmPassword": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"username": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"confirmPassword",
+					"password",
+					"username",
+					"firstName",
+					"email"
+				],
+				"type": "object"
+			},
+			"RegisterRequest": {
+				"$ref": "#/components/schemas/infer_typeofregisterSchema_"
 			}
 		},
 		"securitySchemes": {
@@ -210,7 +407,7 @@
 		}
 	},
 	"info": {
-		"title": "express-tsoa-rest",
+		"title": "express-booking",
 		"version": "1.0.0",
 		"license": {
 			"name": "MIT"
@@ -219,6 +416,48 @@
 	},
 	"paths": {
 		"/users": {
+			"get": {
+				"operationId": "GetAllUsers",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpPaginateResponse_GetAllUserResponse_"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 1,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 20,
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
 			"post": {
 				"operationId": "CreateUser",
 				"responses": {
@@ -233,14 +472,18 @@
 						}
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/UserRequest"
+								"$ref": "#/components/schemas/CreateUserRequest"
 							}
 						}
 					}
@@ -278,6 +521,132 @@
 						}
 					}
 				]
+			},
+			"patch": {
+				"operationId": "UpdateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponse_undefined_"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateUserRequest"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponse_undefined_"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/me": {
+			"get": {
+				"operationId": "GetMe",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponse_UserResponse_"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": []
+			},
+			"patch": {
+				"operationId": "UpdateMe",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponse_undefined_"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateUserRequest"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/auth/login": {
@@ -335,6 +704,63 @@
 						}
 					}
 				]
+			}
+		},
+		"/auth/logout": {
+			"post": {
+				"operationId": "Logout",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponse_undefined_"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "X-Refresh-Token",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/auth/register": {
+			"post": {
+				"operationId": "Register",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponse_RegisterResponse_"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RegisterRequest"
+							}
+						}
+					}
+				}
 			}
 		}
 	},

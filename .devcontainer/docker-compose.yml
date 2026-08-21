@@ -1,14 +1,16 @@
+name: express-booking
+
 services:
-    # app:
-    #     image: mcr.microsoft.com/devcontainers/javascript-node:dev-24-bookworm
-    #     volumes:
-    #         - ..:/workspace:cached
-    #     working_dir: /workspace
-    #     command: sleep infinity
-    #     ports:
-    #         - '3000:3000'
-    #     env_file:
-    #         - ../.env
+    app:
+        image: mcr.microsoft.com/devcontainers/javascript-node:dev-24-bookworm
+        volumes:
+            - ..:/workspace:cached
+        working_dir: /workspace
+        command: sleep infinity
+        ports:
+            - '3000:3000'
+        env_file:
+            - ../.env
 
     postgres:
         image: postgres:18

@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 import z from 'zod';
-import { userSchema } from '../schema/user.schema';
+import { createUserSchema, updateUserSchema } from '../schema/user.schema';
 
 export class UserResponse {
     @Expose()
@@ -19,4 +19,8 @@ export class UserResponse {
     username: string;
 }
 
-export type UserRequest = z.infer<typeof userSchema>;
+export type CreateUserRequest = z.infer<typeof createUserSchema>;
+
+export type UpdateUserRequest = z.infer<typeof updateUserSchema>;
+
+export type GetAllUserResponse = UserResponse[];

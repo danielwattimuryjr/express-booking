@@ -1,5 +1,5 @@
 {
-    "name": "express-tsoa-rest",
+    "name": "express-booking",
     "version": "1.0.0",
     "main": "index.js",
     "license": "MIT",
@@ -38,6 +38,7 @@
         "typeorm": "^1.1.0",
         "typescript": "^7.0.2",
         "winston": "^3.19.0",
+        "winston-daily-rotate-file": "^5.0.0",
         "zod": "^4.4.3"
     },
     "devDependencies": {
