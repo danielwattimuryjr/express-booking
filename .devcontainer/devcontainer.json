@@ -1,0 +1,30 @@
+{
+    "name": "Node.js 24 Dev Container",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
+
+    "forwardPorts": [3000, 5432, 6379],
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "bradlc.vscode-tailwindcss",
+                "ms-ossdata.vscode-pgsql"
+            ],
+            "settings": {
+                "editor.defaultFormatter": "esbenp.prettier-vscode",
+                "editor.formatOnSave": true,
+                "editor.formatOnPaste": true,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": "always",
+                    "source.sortMembers": "always"
+                }
+            }
+        }
+    },
+
+    "postCreateCommand": "yarn install"
+}
