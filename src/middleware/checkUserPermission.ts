@@ -55,7 +55,7 @@ export const checkUserPermissionMiddleware = (policy: AuthorizationPolicy): Requ
             }
 
             if (policy.type === 'role') {
-                const userRoleNames = new Set(user.roles.map((role) => role.name));
+                const userRoleNames = new Set(user.roles);
                 const hasRole =
                     policy.mode === 'all'
                         ? policy.values.every((roleId) => userRoleNames.has(roleId))
@@ -64,18 +64,16 @@ export const checkUserPermissionMiddleware = (policy: AuthorizationPolicy): Requ
                 if (!hasRole) {
                     return next(new ForbiddenError());
                 }
-            }
-
-            if (policy.type === 'permission') {
-                const userPermissions = new Set(
-                    user.roles.flatMap((role) =>
-                        role.permissions.map((permission) => permission.name),
-                    ),
-                );
+            } else if (policy.type === 'permission') {
+                const userPermissionNames = new Set(user.permissions);
                 const hasPermission =
                     policy.mode === 'all'
-                        ? policy.values.every((permissionId) => userPermissions.has(permissionId))
-                        : policy.values.some((permissionId) => userPermissions.has(permissionId));
+                        ? policy.values.every((permissionId) =>
+                              userPermissionNames.has(permissionId),
+                          )
+                        : policy.values.some((permissionId) =>
+                              userPermissionNames.has(permissionId),
+                          );
 
                 if (!hasPermission) {
                     return next(new ForbiddenError());

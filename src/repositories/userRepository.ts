@@ -24,6 +24,8 @@ class UserRepositoryClass extends Repository<User> {
         return this.findOne({
             where: { id },
 
+            relationLoadStrategy: 'query',
+
             relations: {
                 roles: {
                     permissions: true,
@@ -38,11 +40,8 @@ class UserRepositoryClass extends Repository<User> {
                 username: true,
 
                 roles: {
+                    id: true,
                     name: true,
-
-                    permissions: {
-                        name: true,
-                    },
                 },
             },
         });

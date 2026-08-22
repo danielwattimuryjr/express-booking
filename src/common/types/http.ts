@@ -6,12 +6,8 @@ export type AuthenticatedUser = {
     firstName: string;
     lastName: string;
     username: string;
-    roles: {
-        name: string;
-        permissions: {
-            name: string;
-        }[];
-    }[];
+    roles: string[];
+    permissions: string[];
 };
 
 type PaginationMetadata = {
@@ -21,7 +17,7 @@ type PaginationMetadata = {
     totalPages: number;
 };
 
-export type HttpResponse<TData> = TData extends undefined
+export type HttpResponse<TData = undefined> = TData extends undefined
     ? {
           message: string;
           code: StatusCodes;
@@ -32,6 +28,9 @@ export type HttpResponse<TData> = TData extends undefined
           data: TData;
       };
 
-export type HttpPaginateResponse<TData> = HttpResponse<TData> & {
+export interface HttpPaginateResponse<TData> {
+    message: string;
+    code: StatusCodes;
+    data: TData;
     pagination: PaginationMetadata;
-};
+}

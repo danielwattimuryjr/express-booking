@@ -2,7 +2,7 @@ import { DEFAULT_LIMIT, DEFAULT_PAGE, MAX_LIMIT } from '../common/const';
 import { NotFoundError } from '../common/error';
 import { PaginationQuery, RoleRequest, SearchRoleQuery } from '../dto';
 import { Role } from '../entitites';
-import { RoleRepository } from '../repositories/roleRepository';
+import { RoleRepository } from '../repositories';
 
 export class RoleService {
     private static toRoleResponse(role: Role) {

@@ -1,5 +1,5 @@
 import { NotFoundError, UnauthorizedError } from '../common/error';
-import { UserRepository } from '../repositories';
+import { RoleRepository, UserRepository } from '../repositories';
 import bcrypt from 'bcrypt';
 import { JwtService } from './jwtService';
 import { LoginRequest, RegisterRequest } from '../dto';
@@ -81,6 +81,11 @@ export class AuthService {
     }
 
     static async register(body: RegisterRequest) {
+        const role = await RoleRepository.findOneBy({
+            name: RoleEnum.USER,
+        });
+        if (!role) throw new NotFoundError('role with name ROLE_USER not found');
+
         const password = await bcrypt.hash(body.password, 12);
 
         const user = UserRepository.create({
@@ -89,7 +94,7 @@ export class AuthService {
             lastName: body.lastName,
             username: body.username,
             password,
-            roles: [{ name: RoleEnum.USER }],
+            roles: [role],
         });
         await UserRepository.save(user);
 

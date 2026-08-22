@@ -1,4 +1,4 @@
-import { Controller, Header, Post, Route } from 'tsoa';
+import { Controller, Header, Post, Route, Tags } from 'tsoa';
 import { Body, ValidateBody } from '../../decorator';
 import { HttpResponse } from '../../common/types/http';
 import { LoginRequest, AuthResponse, RegisterRequest, RegisterResponse } from '../../dto';
@@ -8,6 +8,7 @@ import { loginSchema, registerSchema } from '../../schema';
 import { extractBearerToken } from '../../common/utils';
 
 @Route('auth')
+@Tags('Authentication')
 export class AuthController extends Controller {
     @Post('login')
     @ValidateBody(loginSchema)

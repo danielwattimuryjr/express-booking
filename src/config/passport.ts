@@ -1,7 +1,7 @@
 import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';
 import config from './config';
 import { UserRepository } from '../repositories';
-import { AccessTokenPayload } from '../services/jwtService';
+import { AccessTokenPayload } from '../services';
 
 export const jwtStrategy = new Strategy(
     {
@@ -17,6 +17,20 @@ export const jwtStrategy = new Strategy(
             return done(null, false);
         }
 
-        return done(null, user);
+        const permissions = [
+            ...new Set(
+                user.roles.flatMap((role) => role.permissions.map((permission) => permission.name)),
+            ),
+        ];
+
+        return done(null, {
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            roles: user.roles.map((role) => role.name),
+            permissions,
+        });
     },
 );

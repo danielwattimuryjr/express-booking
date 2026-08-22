@@ -10,7 +10,7 @@ export const AppDataSource = new DataSource({
     database: config.POSTGRES_DB,
     username: config.POSTGRES_USER,
     password: config.POSTGRES_PASSWORD,
-    synchronize: config.NODE_ENV === 'production' ? false : true,
+    synchronize: config.NODE_ENV === 'production' ? false : false,
     logging: ['query', 'error', 'warn'],
     logger: new TypeOrmWinstonLogger(),
     entities: [User, Role, RefreshToken, Permission],

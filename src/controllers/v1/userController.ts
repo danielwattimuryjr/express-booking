@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Patch, Path, Post, Query, Route, Security } from 'tsoa';
+import { Controller, Delete, Get, Patch, Path, Post, Query, Route, Security, Tags } from 'tsoa';
 import { CreateUserRequest, UpdateUserRequest, UserResponse } from '../../dto';
 import { HttpPaginateResponse, HttpResponse } from '../../common/types/http';
 import { StatusCodes } from 'http-status-codes';
@@ -9,6 +9,7 @@ import { PermissionEnum } from '../../common/enum';
 import { Authorize } from '../../decorator/authorize';
 
 @Route('users')
+@Tags('User Management')
 @Security('bearerAuth')
 export class UserController extends Controller {
     @Get('')

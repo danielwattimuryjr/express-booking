@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, RequestProp, Route, Security } from 'tsoa';
+import { Body, Controller, Get, Patch, RequestProp, Route, Security, Tags } from 'tsoa';
 import { Authorize } from '../../decorator/authorize';
 import type { AuthenticatedUser, HttpResponse } from '../../common/types/http';
 import { UpdateUserRequest, UserResponse } from '../../dto';
@@ -8,13 +8,14 @@ import { ValidateBody } from '../../decorator';
 import { updateUserSchema } from '../../schema';
 
 @Route('me')
+@Tags('Current User')
 @Security('bearerAuth')
 @Authorize({
     type: 'authenticated',
 })
 export class MeController extends Controller {
     @Get()
-    public async getMe(
+    public async getCurrentUser(
         @RequestProp('user') currentLoggedInUser: AuthenticatedUser,
     ): Promise<HttpResponse<UserResponse>> {
         const data = await UserService.getOne(Number(currentLoggedInUser.id));
@@ -28,7 +29,7 @@ export class MeController extends Controller {
 
     @Patch()
     @ValidateBody(updateUserSchema)
-    public async updateMe(
+    public async updateCurrentUser(
         @RequestProp('user') currentLoggedInUser: AuthenticatedUser,
         @Body() body: UpdateUserRequest,
     ): Promise<HttpResponse<UserResponse>> {

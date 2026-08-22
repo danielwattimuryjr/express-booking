@@ -7,54 +7,6 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"HttpResponse_GetAllUserResponse_": {
-				"$ref": "#/components/schemas/HttpResponse_GetAllUserResponse_"
-			},
-			"PaginationMetadata": {
-				"properties": {
-					"totalPages": {
-						"type": "number",
-						"format": "double"
-					},
-					"total": {
-						"type": "number",
-						"format": "double"
-					},
-					"limit": {
-						"type": "number",
-						"format": "double"
-					},
-					"page": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"totalPages",
-					"total",
-					"limit",
-					"page"
-				],
-				"type": "object"
-			},
-			"HttpPaginateResponse_GetAllUserResponse_": {
-				"allOf": [
-					{
-						"$ref": "#/components/schemas/HttpResponse_GetAllUserResponse_"
-					},
-					{
-						"properties": {
-							"pagination": {
-								"$ref": "#/components/schemas/PaginationMetadata"
-							}
-						},
-						"required": [
-							"pagination"
-						],
-						"type": "object"
-					}
-				]
-			},
 			"StatusCodes": {
 				"enum": [
 					100,
@@ -120,29 +72,83 @@
 			},
 			"UserResponse": {
 				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"firstName": {
-						"type": "string"
-					},
-					"lastName": {
+					"username": {
 						"type": "string"
 					},
 					"email": {
 						"type": "string"
 					},
-					"username": {
+					"lastName": {
+						"type": "string",
+						"nullable": true
+					},
+					"firstName": {
 						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
 					}
 				},
 				"required": [
-					"id",
-					"firstName",
-					"lastName",
+					"username",
 					"email",
-					"username"
+					"lastName",
+					"firstName",
+					"id"
+				],
+				"type": "object"
+			},
+			"PaginationMetadata": {
+				"properties": {
+					"totalPages": {
+						"type": "number",
+						"format": "double"
+					},
+					"total": {
+						"type": "number",
+						"format": "double"
+					},
+					"limit": {
+						"type": "number",
+						"format": "double"
+					},
+					"page": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"totalPages",
+					"total",
+					"limit",
+					"page"
+				],
+				"type": "object"
+			},
+			"HttpPaginateResponse_UserResponse-Array_": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"code": {
+						"$ref": "#/components/schemas/StatusCodes"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/UserResponse"
+						},
+						"type": "array"
+					},
+					"pagination": {
+						"$ref": "#/components/schemas/PaginationMetadata"
+					}
+				},
+				"required": [
+					"message",
+					"code",
+					"data",
+					"pagination"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -195,21 +201,6 @@
 			"CreateUserRequest": {
 				"$ref": "#/components/schemas/infer_typeofcreateUserSchema_"
 			},
-			"HttpResponse_undefined_": {
-				"properties": {
-					"code": {
-						"$ref": "#/components/schemas/StatusCodes"
-					},
-					"message": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"code",
-					"message"
-				],
-				"type": "object"
-			},
 			"infer_typeofupdateUserSchema_": {
 				"properties": {
 					"lastName": {
@@ -235,34 +226,193 @@
 			"UpdateUserRequest": {
 				"$ref": "#/components/schemas/infer_typeofupdateUserSchema_"
 			},
+			"HttpResponse_undefined_": {
+				"properties": {
+					"code": {
+						"$ref": "#/components/schemas/StatusCodes"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"code",
+					"message"
+				],
+				"type": "object"
+			},
+			"RolePermissionResponse": {
+				"properties": {
+					"description": {
+						"type": "string",
+						"nullable": true
+					},
+					"name": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"description",
+					"name",
+					"id"
+				],
+				"type": "object"
+			},
+			"HttpResponse_RolePermissionResponse-Array_": {
+				"properties": {
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/RolePermissionResponse"
+						},
+						"type": "array"
+					},
+					"code": {
+						"$ref": "#/components/schemas/StatusCodes"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"data",
+					"code",
+					"message"
+				],
+				"type": "object"
+			},
+			"PermissionEnum": {
+				"enum": [
+					"user.read",
+					"user.create",
+					"user.update",
+					"user.delete",
+					"role.read",
+					"role.create",
+					"role.update",
+					"role.delete",
+					"booking.read",
+					"booking.create",
+					"booking.update",
+					"booking.cancel"
+				],
+				"type": "string"
+			},
+			"infer_typeofupdateRolePermissionSchema_": {
+				"properties": {
+					"permissions": {
+						"items": {
+							"$ref": "#/components/schemas/PermissionEnum"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"permissions"
+				],
+				"type": "object"
+			},
+			"RolePermissionRequest": {
+				"$ref": "#/components/schemas/infer_typeofupdateRolePermissionSchema_"
+			},
+			"RoleResponse": {
+				"properties": {
+					"description": {
+						"type": "string",
+						"nullable": true
+					},
+					"name": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"description",
+					"name",
+					"id"
+				],
+				"type": "object"
+			},
+			"HttpPaginateResponse_RoleResponse-Array_": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"code": {
+						"$ref": "#/components/schemas/StatusCodes"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/RoleResponse"
+						},
+						"type": "array"
+					},
+					"pagination": {
+						"$ref": "#/components/schemas/PaginationMetadata"
+					}
+				},
+				"required": [
+					"message",
+					"code",
+					"data",
+					"pagination"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"HttpResponse_RoleResponse_": {
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/RoleResponse"
+					},
+					"code": {
+						"$ref": "#/components/schemas/StatusCodes"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"data",
+					"code",
+					"message"
+				],
+				"type": "object"
+			},
+			"infer_typeofroleRequestSchema_": {
+				"properties": {
+					"description": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name"
+				],
+				"type": "object"
+			},
+			"RoleRequest": {
+				"$ref": "#/components/schemas/infer_typeofroleRequestSchema_"
+			},
 			"AuthenticatedUser": {
 				"properties": {
+					"permissions": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
 					"roles": {
 						"items": {
-							"properties": {
-								"permissions": {
-									"items": {
-										"properties": {
-											"name": {
-												"type": "string"
-											}
-										},
-										"required": [
-											"name"
-										],
-										"type": "object"
-									},
-									"type": "array"
-								},
-								"name": {
-									"type": "string"
-								}
-							},
-							"required": [
-								"permissions",
-								"name"
-							],
-							"type": "object"
+							"type": "string"
 						},
 						"type": "array"
 					},
@@ -283,6 +433,7 @@
 					}
 				},
 				"required": [
+					"permissions",
 					"roles",
 					"username",
 					"lastName",
@@ -424,12 +575,15 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpPaginateResponse_GetAllUserResponse_"
+									"$ref": "#/components/schemas/HttpPaginateResponse_UserResponse-Array_"
 								}
 							}
 						}
 					}
 				},
+				"tags": [
+					"User Management"
+				],
 				"security": [
 					{
 						"bearerAuth": []
@@ -455,6 +609,22 @@
 							"format": "double",
 							"type": "number"
 						}
+					},
+					{
+						"in": "query",
+						"name": "name",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "username",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
 					}
 				]
 			},
@@ -472,6 +642,9 @@
 						}
 					}
 				},
+				"tags": [
+					"User Management"
+				],
 				"security": [
 					{
 						"bearerAuth": []
@@ -505,6 +678,9 @@
 						}
 					}
 				},
+				"tags": [
+					"User Management"
+				],
 				"security": [
 					{
 						"bearerAuth": []
@@ -530,12 +706,15 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_undefined_"
+									"$ref": "#/components/schemas/HttpResponse_UserResponse_"
 								}
 							}
 						}
 					}
 				},
+				"tags": [
+					"User Management"
+				],
 				"security": [
 					{
 						"bearerAuth": []
@@ -577,6 +756,9 @@
 						}
 					}
 				},
+				"tags": [
+					"User Management"
+				],
 				"security": [
 					{
 						"bearerAuth": []
@@ -595,30 +777,256 @@
 				]
 			}
 		},
-		"/me": {
+		"/roles/{roleId}/permissions": {
 			"get": {
-				"operationId": "GetMe",
+				"operationId": "GetRoleWithAllPermissions",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_UserResponse_"
+									"$ref": "#/components/schemas/HttpResponse_RolePermissionResponse-Array_"
 								}
 							}
 						}
 					}
 				},
+				"tags": [
+					"Roles & Permissions"
+				],
 				"security": [
 					{
 						"bearerAuth": []
 					}
 				],
-				"parameters": []
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "PutRoleWithPermissions",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponse_RolePermissionResponse-Array_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Roles & Permissions"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RolePermissionRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/roles": {
+			"get": {
+				"operationId": "GetAllRoles",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpPaginateResponse_RoleResponse-Array_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Roles & Permissions"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 1,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 20,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "name",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "PostRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponse_RoleResponse_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Roles & Permissions"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RoleRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/roles/{roleId}": {
+			"get": {
+				"operationId": "GetOneRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponse_RoleResponse_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Roles & Permissions"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			},
 			"patch": {
-				"operationId": "UpdateMe",
+				"operationId": "PatchRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponse_RoleResponse_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Roles & Permissions"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RoleRequest"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteRole",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -631,6 +1039,69 @@
 						}
 					}
 				},
+				"tags": [
+					"Roles & Permissions"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/me": {
+			"get": {
+				"operationId": "GetCurrentUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponse_UserResponse_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Current User"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": []
+			},
+			"patch": {
+				"operationId": "UpdateCurrentUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponse_UserResponse_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Current User"
+				],
 				"security": [
 					{
 						"bearerAuth": []
@@ -664,6 +1135,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Authentication"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
@@ -693,6 +1167,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Authentication"
+				],
 				"security": [],
 				"parameters": [
 					{
@@ -721,6 +1198,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Authentication"
+				],
 				"security": [],
 				"parameters": [
 					{
@@ -749,6 +1229,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Authentication"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {

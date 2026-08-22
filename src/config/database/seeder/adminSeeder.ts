@@ -1,0 +1,30 @@
+import { RoleEnum } from '../../../common/enum';
+import { NotFoundError } from '../../../common/error';
+import { Role, User } from '../../../entitites';
+import { AppDataSource } from '../typeorm';
+import bcrypt from 'bcrypt';
+
+export async function seedAdmin() {
+    const userRepository = AppDataSource.getRepository(User);
+    const roleRepository = AppDataSource.getRepository(Role);
+
+    const password = await bcrypt.hash('password123', 12);
+
+    const adminRole = await roleRepository.findOne({
+        where: { name: RoleEnum.ADMIN },
+    });
+
+    if (!adminRole) {
+        throw new NotFoundError('ADMIN role not found — did you seed roles?');
+    }
+
+    const user = userRepository.create({
+        firstName: 'Admin',
+        email: 'admin@app.com',
+        password,
+        username: 'admin',
+        roles: [adminRole],
+    });
+
+    await userRepository.save(user);
+}

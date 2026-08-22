@@ -1,5 +1,5 @@
 import { NotFoundError } from '../common/error';
-import { UserRepository } from '../repositories';
+import { RoleRepository, UserRepository } from '../repositories';
 import bcrypt from 'bcrypt';
 import { RoleEnum } from '../common/enum';
 import { CreateUserRequest, PaginationQuery, SearchUserQuery, UpdateUserRequest } from '../dto';
@@ -53,6 +53,10 @@ export class UserService {
     }
 
     static async createUser(request: CreateUserRequest) {
+        const role = await RoleRepository.findOneBy({
+            name: RoleEnum.USER,
+        });
+        if (!role) throw new NotFoundError('role with name ROLE_USER not found');
         const hashedPassword = await bcrypt.hash(request.password, 12);
 
         const user = UserRepository.create({
@@ -61,11 +65,7 @@ export class UserService {
             lastName: request.lastName,
             password: hashedPassword,
             username: request.username,
-            roles: [
-                {
-                    name: RoleEnum.USER,
-                },
-            ],
+            roles: [role],
         });
         await UserRepository.save(user);
 

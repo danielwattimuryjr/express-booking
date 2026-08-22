@@ -8,11 +8,11 @@ class RoleRepositoryClass extends Repository<Role> {
     }
 
     async findPaginated(page: number, limit: number, name?: string) {
-        const query = this.createQueryBuilder('user')
+        const query = this.createQueryBuilder('role')
             .select(['role.id', 'role.name', 'role.description'])
             .skip((page - 1) * limit)
             .take(limit)
-            .orderBy('user.name', 'ASC');
+            .orderBy('role.name', 'ASC');
 
         if (name)
             query.andWhere(`role.name ILIKE :name`, {

@@ -1,5 +1,6 @@
 import { logger } from '../../logger';
 import { AppDataSource } from '../typeorm';
+import { seedAdmin } from './adminSeeder';
 import { clearTablesData } from './clearTablesData';
 import { seedPermissions } from './permissionSeeder';
 import { seedRolePermissions } from './rolePermissionSeeder';
@@ -16,6 +17,7 @@ async function seed() {
         await seedPermissions();
         await seedRoles();
         await seedRolePermissions();
+        await seedAdmin();
 
         logger.debug('✅ Database seeded successfully');
     } catch (error) {
