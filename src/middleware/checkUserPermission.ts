@@ -4,6 +4,10 @@ import { ForbiddenError, UnauthorizedError } from '../error';
 import { RoleEnum } from '../common/enum';
 import { PermissionEnum } from '../common/enum/PermissionEnum';
 
+interface JwtAuthInfo {
+    message?: string;
+}
+
 export type AuthorizationPolicy =
     | RoleAuthorizationPolicy
     | PermissionAuthorizationPolicy
@@ -33,7 +37,7 @@ const authenticateJwt = (
         passport.authenticate(
             'jwt',
             { session: false },
-            (err: Error | null, user: Express.User | false, info: any) => {
+            (err: Error | null, user: Express.User | false, info: JwtAuthInfo) => {
                 if (err) return reject(err);
                 if (!user) return reject(new UnauthorizedError(info?.message));
                 resolve(user);

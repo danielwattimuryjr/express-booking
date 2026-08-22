@@ -14,6 +14,6 @@ export async function seedEnum<T extends ObjectLiteral>({
     const records = Object.values(values).map(map);
 
     await repository.deleteAll();
-    // @ts-ignore
+    // @ts-expect-error - upsert() typing from TypeORM doesn't infer conflict columns for generic repository
     await repository.upsert(records, ['name']);
 }
