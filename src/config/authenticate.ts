@@ -1,13 +1,10 @@
 import * as express from 'express';
 
 export function expressAuthentication(
-    // @ts-ignore
-    request: express.Request,
-    // @ts-ignore
-    securityName: string,
-    // @ts-ignore
-    scopes?: string[],
-): Promise<any> {
+    _request: express.Request,
+    _securityName: string,
+    _scopes?: string[],
+) {
     /*
      * This just tells TSOA to add auth specs to openapi.
      * Actual authentication is handled by a custom middleware.
