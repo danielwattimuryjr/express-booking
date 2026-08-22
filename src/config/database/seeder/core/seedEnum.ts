@@ -1,9 +1,9 @@
-import { Repository, ObjectLiteral } from 'typeorm';
+import { Repository, ObjectLiteral, DeepPartial } from 'typeorm';
 
 interface SeedEnumOptions<T extends ObjectLiteral> {
     repository: Repository<T>;
     values: Record<string, string>;
-    map: (value: string) => T;
+    map: (value: string) => DeepPartial<T>;
 }
 
 export async function seedEnum<T extends ObjectLiteral>({

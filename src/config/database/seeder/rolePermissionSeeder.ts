@@ -19,6 +19,10 @@ const rolePermissions: Record<RoleEnum, PermissionEnum[]> = {
     ],
 };
 
+function isRoleEnum(value: string): value is RoleEnum {
+    return Object.values(RoleEnum).includes(value as RoleEnum);
+}
+
 export async function seedRolePermissions() {
     const roleRepository = AppDataSource.getRepository(Role);
     const permissionRepository = AppDataSource.getRepository(Permission);
@@ -34,6 +38,10 @@ export async function seedRolePermissions() {
     });
 
     for (const role of roles) {
+        if (!isRoleEnum(role.name)) {
+            throw new Error(`Invalid role: ${role.name}`);
+        }
+
         const permissionNames = rolePermissions[role.name] ?? [];
 
         role.permissions = permissionNames

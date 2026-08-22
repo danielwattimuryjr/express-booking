@@ -1,14 +1,27 @@
-import { Entity, ManyToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from './Role';
-import { PermissionEnum } from '../common/enum/PermissionEnum';
 
 @Entity({
     schema: 'auth',
     name: 'permissions',
 })
 export class Permission {
-    @PrimaryColumn('varchar')
-    name: PermissionEnum;
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column({
+        type: 'varchar',
+        length: 25,
+        unique: true,
+    })
+    name: string;
+
+    @Column({
+        type: 'varchar',
+        length: 100,
+        nullable: true,
+    })
+    description: string | null;
 
     @ManyToMany(() => Role, (role) => role.permissions)
     roles: Role[];

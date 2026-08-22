@@ -1,3 +1,4 @@
-export * from './auth.schema';
-export * from './env.schema';
-export * from './user.schema';
+export * from './authSchema';
+export * from './envSchema';
+export * from './userSchema';
+export * from './roleSchema';

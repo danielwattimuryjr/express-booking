@@ -11,7 +11,7 @@
         "start": "node dist/index.js",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
-        "db:seed": "tsx src/database/seeder/index.ts"
+        "db:seed": "tsx src/config/database/seeder/index.ts"
     },
     "dependencies": {
         "bcrypt": "^6.0.0",

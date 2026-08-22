@@ -10,8 +10,8 @@ export async function seedRoles() {
         repository,
         values: RoleEnum,
         map: (name) => ({
-            description: `${name} Role`,
             name,
+            description: null,
         }),
     });
 }

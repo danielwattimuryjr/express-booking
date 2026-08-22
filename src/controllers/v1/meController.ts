@@ -17,18 +17,12 @@ export class MeController extends Controller {
     public async getMe(
         @RequestProp('user') currentLoggedInUser: AuthenticatedUser,
     ): Promise<HttpResponse<UserResponse>> {
-        const user = await UserService.getOne(Number(currentLoggedInUser.id));
+        const data = await UserService.getOne(Number(currentLoggedInUser.id));
 
         return {
             code: StatusCodes.OK,
             message: 'User data fetched successfully',
-            data: {
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                id: user.id,
-                username: user.username,
-            },
+            data,
         };
     }
 
@@ -37,12 +31,13 @@ export class MeController extends Controller {
     public async updateMe(
         @RequestProp('user') currentLoggedInUser: AuthenticatedUser,
         @Body() body: UpdateUserRequest,
-    ): Promise<HttpResponse<undefined>> {
-        await UserService.updateUser(body, Number(currentLoggedInUser.id));
+    ): Promise<HttpResponse<UserResponse>> {
+        const data = await UserService.updateUser(body, Number(currentLoggedInUser.id));
 
         return {
             code: StatusCodes.OK,
             message: 'User data updated successfully',
+            data,
         };
     }
 }

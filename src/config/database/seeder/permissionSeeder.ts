@@ -11,6 +11,7 @@ export async function seedPermissions() {
         values: PermissionEnum,
         map: (name) => ({
             name,
+            description: null,
         }),
     });
 }

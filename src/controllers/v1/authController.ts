@@ -3,7 +3,6 @@ import { Body, ValidateBody } from '../../decorator';
 import { HttpResponse } from '../../common/types/http';
 import { LoginRequest, AuthResponse, RegisterRequest, RegisterResponse } from '../../dto';
 import { StatusCodes } from 'http-status-codes';
-import { AuthSerializer } from '../../serializer';
 import { AuthService } from '../../services';
 import { loginSchema, registerSchema } from '../../schema';
 import { extractBearerToken } from '../../common/utils';
@@ -18,7 +17,7 @@ export class AuthController extends Controller {
         return {
             code: StatusCodes.OK,
             message: 'Login successfull',
-            data: AuthSerializer.serialize(data),
+            data,
         };
     }
 
@@ -32,7 +31,7 @@ export class AuthController extends Controller {
         return {
             code: StatusCodes.OK,
             message: 'Token refreshed',
-            data: AuthSerializer.serialize(data),
+            data,
         };
     }
 

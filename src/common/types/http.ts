@@ -35,8 +35,3 @@ export type HttpResponse<TData> = TData extends undefined
 export type HttpPaginateResponse<TData> = HttpResponse<TData> & {
     pagination: PaginationMetadata;
 };
-
-export interface PaginationQuery {
-    page?: number;
-    limit?: number;
-}

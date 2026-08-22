@@ -28,6 +28,7 @@ export class User {
     @Column({
         type: 'varchar',
         length: 50,
+        name: 'first_name',
     })
     firstName: string;
 
@@ -35,8 +36,9 @@ export class User {
         type: 'varchar',
         nullable: true,
         length: 50,
+        name: 'last_name',
     })
-    lastName: string;
+    lastName: string | null;
 
     @Column({
         type: 'varchar',
@@ -60,7 +62,7 @@ export class User {
         },
         inverseJoinColumn: {
             name: 'role_id',
-            referencedColumnName: 'name',
+            referencedColumnName: 'id',
         },
     })
     roles: Relation<Role[]>;

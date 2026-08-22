@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { envSchema } from '../schema/env.schema';
+import { envSchema } from '../schema/envSchema';
 import { logger } from './logger';
 
 dotenv.config();

@@ -1,27 +1,27 @@
 import { Controller, Delete, Get, Patch, Path, Post, Query, Route, Security } from 'tsoa';
-import { CreateUserRequest, GetAllUserResponse, UpdateUserRequest, UserResponse } from '../../dto';
+import { CreateUserRequest, UpdateUserRequest, UserResponse } from '../../dto';
 import { HttpPaginateResponse, HttpResponse } from '../../common/types/http';
 import { StatusCodes } from 'http-status-codes';
 import { UserService } from '../../services';
-import { createUserSchema, updateUserSchema } from '../../schema/user.schema';
+import { createUserSchema, updateUserSchema } from '../../schema/userSchema';
 import { Body, ValidateBody } from '../../decorator';
-import { RoleEnum } from '../../common/enum';
+import { PermissionEnum } from '../../common/enum';
 import { Authorize } from '../../decorator/authorize';
 
 @Route('users')
 @Security('bearerAuth')
-@Authorize({
-    type: 'role',
-    values: [RoleEnum.ADMIN],
-})
 export class UserController extends Controller {
     @Get('')
+    @Authorize({
+        type: 'permission',
+        values: [PermissionEnum.USER_READ],
+    })
     public async getAllUsers(
         @Query() page: number = 1,
         @Query() limit: number = 20,
         @Query() name?: string,
         @Query() username?: string,
-    ): Promise<HttpPaginateResponse<GetAllUserResponse>> {
+    ): Promise<HttpPaginateResponse<UserResponse[]>> {
         const result = await UserService.getUsers({
             limit,
             page,
@@ -37,60 +37,64 @@ export class UserController extends Controller {
         };
     }
 
+    @Authorize({
+        type: 'permission',
+        values: [PermissionEnum.USER_READ],
+    })
     @Get('{userId}')
     public async getUser(@Path() userId: number): Promise<HttpResponse<UserResponse>> {
-        const user = await UserService.getOne(userId);
+        const data = await UserService.getOne(userId);
 
         return {
             message: 'User retrieved successfully',
             code: StatusCodes.OK,
-            data: {
-                id: user.id,
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                username: user.password,
-            },
+            data,
         };
     }
 
     @Post('')
+    @Authorize({
+        type: 'permission',
+        values: [PermissionEnum.USER_CREATE],
+    })
     @ValidateBody(createUserSchema)
     public async createUser(
         @Body() request: CreateUserRequest,
     ): Promise<HttpResponse<UserResponse>> {
-        const user = await UserService.createUser(request);
+        const data = await UserService.createUser(request);
 
         this.setStatus(StatusCodes.CREATED);
         return {
             message: 'User created successfully',
             code: StatusCodes.CREATED,
-            data: {
-                id: user.id,
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                username: user.password,
-            },
+            data,
         };
     }
 
     @Patch('{userId}')
     @ValidateBody(updateUserSchema)
+    @Authorize({
+        type: 'permission',
+        values: [PermissionEnum.USER_UPDATE],
+    })
     public async updateUser(
         @Path() userId: number,
         @Body() body: UpdateUserRequest,
-    ): Promise<HttpResponse<undefined>> {
-        await UserService.updateUser(body, userId);
+    ): Promise<HttpResponse<UserResponse>> {
+        const data = await UserService.updateUser(body, userId);
 
         return {
             code: StatusCodes.OK,
             message: 'User data updated successfully',
+            data,
         };
     }
 
     @Delete('{userId}')
-    @ValidateBody(updateUserSchema)
+    @Authorize({
+        type: 'permission',
+        values: [PermissionEnum.USER_DELETE],
+    })
     public async deleteUser(@Path() userId: number): Promise<HttpResponse<undefined>> {
         await UserService.deleteUser(userId);
 

@@ -2,19 +2,21 @@ import { NotFoundError } from '../common/error';
 import { UserRepository } from '../repositories';
 import bcrypt from 'bcrypt';
 import { RoleEnum } from '../common/enum';
-import { CreateUserRequest, UpdateUserRequest } from '../dto';
-import { PaginationQuery } from '../common/types/http';
-
-const DEFAULT_PAGE = 1;
-const DEFAULT_LIMIT = 20;
-const MAX_LIMIT = 100;
-
-type SearchUserQuery = {
-    name?: string;
-    username?: string;
-};
+import { CreateUserRequest, PaginationQuery, SearchUserQuery, UpdateUserRequest } from '../dto';
+import { DEFAULT_LIMIT, DEFAULT_PAGE, MAX_LIMIT } from '../common/const';
+import { User } from '../entitites';
 
 export class UserService {
+    private static toUserResponse(user: User) {
+        return {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName ?? null,
+        };
+    }
+
     static async getUsers({
         page = DEFAULT_PAGE,
         limit = DEFAULT_LIMIT,
@@ -45,10 +47,9 @@ export class UserService {
 
     static async getOne(userId: number) {
         const user = await UserRepository.findById(userId);
-
         if (!user) throw new NotFoundError('User not found');
 
-        return user;
+        return this.toUserResponse(user);
     }
 
     static async createUser(request: CreateUserRequest) {
@@ -72,10 +73,19 @@ export class UserService {
     }
 
     static async updateUser(request: UpdateUserRequest, userId: number) {
-        await UserRepository.update({ id: userId }, request);
+        const user = await this.getOne(userId);
+        user.email = request.email;
+        user.firstName = request.firstName;
+        user.lastName = request.lastName ?? null;
+        user.username = request.username;
+        await UserRepository.save(user);
+
+        return user;
     }
 
     static async deleteUser(userId: number) {
-        await UserRepository.delete({ id: userId });
+        const user = await this.getOne(userId);
+
+        return await UserRepository.deleteById(user.id);
     }
 }

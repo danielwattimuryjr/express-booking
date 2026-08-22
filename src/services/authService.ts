@@ -93,6 +93,12 @@ export class AuthService {
         });
         await UserRepository.save(user);
 
-        return user;
+        return {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName ?? null,
+        };
     }
 }
