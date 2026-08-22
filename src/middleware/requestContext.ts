@@ -19,7 +19,8 @@ export const requestContextStorage = new AsyncLocalStorage<RequestContext>();
  */
 export function requestContextMiddleware(req: Request, res: Response, next: NextFunction): void {
     const incoming = req.headers['x-request-id'];
-    const requestId = typeof incoming === 'string' && incoming.trim() ? incoming : randomUUID();
+    const trimmed = typeof incoming === 'string' ? incoming.trim() : '';
+    const requestId = trimmed ? trimmed : randomUUID();
 
     res.setHeader('X-Request-Id', requestId);
 
