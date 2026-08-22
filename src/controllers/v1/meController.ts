@@ -1,11 +1,15 @@
 import { Body, Controller, Get, Patch, RequestProp, Route, Security, Tags } from 'tsoa';
 import { Authorize } from '../../decorator/authorize';
-import type { AuthenticatedUser, HttpResponse } from '../../common/types/http';
-import { UpdateUserRequest, UserResponse } from '../../dto';
 import { UserService } from '../../services';
 import { StatusCodes } from 'http-status-codes';
 import { ValidateBody } from '../../decorator';
 import { updateUserSchema } from '../../schema';
+import {
+    AuthenticatedUserRequest,
+    GetCurrentUserResponse,
+    PatchCurrentUserRequest,
+    PatchCurrentUserResponse,
+} from '../../dto';
 
 @Route('me')
 @Tags('Current User')
@@ -16,8 +20,8 @@ import { updateUserSchema } from '../../schema';
 export class MeController extends Controller {
     @Get()
     public async getCurrentUser(
-        @RequestProp('user') currentLoggedInUser: AuthenticatedUser,
-    ): Promise<HttpResponse<UserResponse>> {
+        @RequestProp('user') currentLoggedInUser: AuthenticatedUserRequest,
+    ): Promise<GetCurrentUserResponse> {
         const data = await UserService.getOne(Number(currentLoggedInUser.id));
 
         return {
@@ -30,9 +34,9 @@ export class MeController extends Controller {
     @Patch()
     @ValidateBody(updateUserSchema)
     public async updateCurrentUser(
-        @RequestProp('user') currentLoggedInUser: AuthenticatedUser,
-        @Body() body: UpdateUserRequest,
-    ): Promise<HttpResponse<UserResponse>> {
+        @RequestProp('user') currentLoggedInUser: AuthenticatedUserRequest,
+        @Body() body: PatchCurrentUserRequest,
+    ): Promise<PatchCurrentUserResponse> {
         const data = await UserService.updateUser(body, Number(currentLoggedInUser.id));
 
         return {

@@ -1,6 +1,6 @@
 import { RoleEnum } from '../../../common/enum';
-import { NotFoundError } from '../../../common/error';
-import { Role, User } from '../../../entitites';
+import { NotFoundError } from '../../../error';
+import { Role, User } from '../../../entities';
 import { AppDataSource } from '../typeorm';
 import bcrypt from 'bcrypt';
 

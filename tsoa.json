@@ -15,8 +15,9 @@
         }
     },
     "routes": {
-        "routesDir": "src/routes",
+        "routesDir": "src",
         "basePath": "/api/v1",
-        "authenticationModule": "./src/config/authenticate.ts"
+        "authenticationModule": "./src/config/authenticate.ts",
+        "routesFileName": "generated-routes.ts"
     }
 }

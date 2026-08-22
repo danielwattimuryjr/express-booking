@@ -153,6 +153,9 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"GetAllUserResponse": {
+				"$ref": "#/components/schemas/HttpPaginateResponse_UserResponse-Array_"
+			},
 			"HttpResponse_UserResponse_": {
 				"properties": {
 					"data": {
@@ -171,6 +174,12 @@
 					"message"
 				],
 				"type": "object"
+			},
+			"GetOneUserResponse": {
+				"$ref": "#/components/schemas/HttpResponse_UserResponse_"
+			},
+			"PostUserResponse": {
+				"$ref": "#/components/schemas/HttpResponse_UserResponse_"
 			},
 			"infer_typeofcreateUserSchema_": {
 				"properties": {
@@ -198,8 +207,11 @@
 				],
 				"type": "object"
 			},
-			"CreateUserRequest": {
+			"PostUserRequest": {
 				"$ref": "#/components/schemas/infer_typeofcreateUserSchema_"
+			},
+			"PatchUserResponse": {
+				"$ref": "#/components/schemas/HttpResponse_UserResponse_"
 			},
 			"infer_typeofupdateUserSchema_": {
 				"properties": {
@@ -223,7 +235,7 @@
 				],
 				"type": "object"
 			},
-			"UpdateUserRequest": {
+			"PatchUserRequest": {
 				"$ref": "#/components/schemas/infer_typeofupdateUserSchema_"
 			},
 			"HttpResponse_undefined_": {
@@ -240,6 +252,9 @@
 					"message"
 				],
 				"type": "object"
+			},
+			"DeleteUserResponse": {
+				"$ref": "#/components/schemas/HttpResponse_undefined_"
 			},
 			"RolePermissionResponse": {
 				"properties": {
@@ -284,6 +299,12 @@
 				],
 				"type": "object"
 			},
+			"GetRolePermissionResponse": {
+				"$ref": "#/components/schemas/HttpResponse_RolePermissionResponse-Array_"
+			},
+			"PutRolePermissionResponse": {
+				"$ref": "#/components/schemas/HttpResponse_RolePermissionResponse-Array_"
+			},
 			"PermissionEnum": {
 				"enum": [
 					"user.read",
@@ -315,7 +336,7 @@
 				],
 				"type": "object"
 			},
-			"RolePermissionRequest": {
+			"PutRolePermissionRequest": {
 				"$ref": "#/components/schemas/infer_typeofupdateRolePermissionSchema_"
 			},
 			"RoleResponse": {
@@ -366,6 +387,9 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"GetAllRoleResponse": {
+				"$ref": "#/components/schemas/HttpPaginateResponse_RoleResponse-Array_"
+			},
 			"HttpResponse_RoleResponse_": {
 				"properties": {
 					"data": {
@@ -385,6 +409,12 @@
 				],
 				"type": "object"
 			},
+			"GetOneRoleResponse": {
+				"$ref": "#/components/schemas/HttpResponse_RoleResponse_"
+			},
+			"PostRoleResponse": {
+				"$ref": "#/components/schemas/HttpResponse_RoleResponse_"
+			},
 			"infer_typeofroleRequestSchema_": {
 				"properties": {
 					"description": {
@@ -399,10 +429,22 @@
 				],
 				"type": "object"
 			},
-			"RoleRequest": {
+			"PostRoleRequest": {
 				"$ref": "#/components/schemas/infer_typeofroleRequestSchema_"
 			},
-			"AuthenticatedUser": {
+			"PatchRoleResponse": {
+				"$ref": "#/components/schemas/HttpResponse_RoleResponse_"
+			},
+			"PatchRoleRequest": {
+				"$ref": "#/components/schemas/infer_typeofroleRequestSchema_"
+			},
+			"DeleteRoleResponse": {
+				"$ref": "#/components/schemas/HttpResponse_undefined_"
+			},
+			"GetCurrentUserResponse": {
+				"$ref": "#/components/schemas/HttpResponse_UserResponse_"
+			},
+			"AuthenticatedUserRequest": {
 				"properties": {
 					"permissions": {
 						"items": {
@@ -443,21 +485,26 @@
 				],
 				"type": "object"
 			},
+			"PatchCurrentUserResponse": {
+				"$ref": "#/components/schemas/HttpResponse_UserResponse_"
+			},
+			"PatchCurrentUserRequest": {
+				"$ref": "#/components/schemas/infer_typeofupdateUserSchema_"
+			},
 			"AuthResponse": {
 				"properties": {
-					"accessToken": {
+					"refreshToken": {
 						"type": "string"
 					},
-					"refreshToken": {
+					"accessToken": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"accessToken",
-					"refreshToken"
+					"refreshToken",
+					"accessToken"
 				],
-				"type": "object",
-				"additionalProperties": false
+				"type": "object"
 			},
 			"HttpResponse_AuthResponse_": {
 				"properties": {
@@ -478,6 +525,9 @@
 				],
 				"type": "object"
 			},
+			"PostLoginResponse": {
+				"$ref": "#/components/schemas/HttpResponse_AuthResponse_"
+			},
 			"infer_typeofloginSchema_": {
 				"properties": {
 					"password": {
@@ -493,27 +543,17 @@
 				],
 				"type": "object"
 			},
-			"LoginRequest": {
+			"PostLoginRequest": {
 				"$ref": "#/components/schemas/infer_typeofloginSchema_"
 			},
-			"HttpResponse_RegisterResponse_": {
-				"properties": {
-					"data": {
-						"$ref": "#/components/schemas/UserResponse"
-					},
-					"code": {
-						"$ref": "#/components/schemas/StatusCodes"
-					},
-					"message": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"data",
-					"code",
-					"message"
-				],
-				"type": "object"
+			"PostRefreshResponse": {
+				"$ref": "#/components/schemas/HttpResponse_AuthResponse_"
+			},
+			"PostLogoutResponse": {
+				"$ref": "#/components/schemas/HttpResponse_undefined_"
+			},
+			"PostRegisterResponse": {
+				"$ref": "#/components/schemas/HttpResponse_UserResponse_"
 			},
 			"infer_typeofregisterSchema_": {
 				"properties": {
@@ -545,7 +585,7 @@
 				],
 				"type": "object"
 			},
-			"RegisterRequest": {
+			"PostRegisterRequest": {
 				"$ref": "#/components/schemas/infer_typeofregisterSchema_"
 			}
 		},
@@ -575,7 +615,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpPaginateResponse_UserResponse-Array_"
+									"$ref": "#/components/schemas/GetAllUserResponse"
 								}
 							}
 						}
@@ -636,7 +676,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_UserResponse_"
+									"$ref": "#/components/schemas/PostUserResponse"
 								}
 							}
 						}
@@ -656,7 +696,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/CreateUserRequest"
+								"$ref": "#/components/schemas/PostUserRequest"
 							}
 						}
 					}
@@ -672,7 +712,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_UserResponse_"
+									"$ref": "#/components/schemas/GetOneUserResponse"
 								}
 							}
 						}
@@ -706,7 +746,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_UserResponse_"
+									"$ref": "#/components/schemas/PatchUserResponse"
 								}
 							}
 						}
@@ -736,7 +776,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/UpdateUserRequest"
+								"$ref": "#/components/schemas/PatchUserRequest"
 							}
 						}
 					}
@@ -750,7 +790,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_undefined_"
+									"$ref": "#/components/schemas/DeleteUserResponse"
 								}
 							}
 						}
@@ -786,7 +826,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_RolePermissionResponse-Array_"
+									"$ref": "#/components/schemas/GetRolePermissionResponse"
 								}
 							}
 						}
@@ -820,7 +860,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_RolePermissionResponse-Array_"
+									"$ref": "#/components/schemas/PutRolePermissionResponse"
 								}
 							}
 						}
@@ -850,7 +890,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/RolePermissionRequest"
+								"$ref": "#/components/schemas/PutRolePermissionRequest"
 							}
 						}
 					}
@@ -866,7 +906,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpPaginateResponse_RoleResponse-Array_"
+									"$ref": "#/components/schemas/GetAllRoleResponse"
 								}
 							}
 						}
@@ -919,7 +959,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_RoleResponse_"
+									"$ref": "#/components/schemas/PostRoleResponse"
 								}
 							}
 						}
@@ -939,7 +979,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/RoleRequest"
+								"$ref": "#/components/schemas/PostRoleRequest"
 							}
 						}
 					}
@@ -955,7 +995,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_RoleResponse_"
+									"$ref": "#/components/schemas/GetOneRoleResponse"
 								}
 							}
 						}
@@ -989,7 +1029,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_RoleResponse_"
+									"$ref": "#/components/schemas/PatchRoleResponse"
 								}
 							}
 						}
@@ -1019,7 +1059,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/RoleRequest"
+								"$ref": "#/components/schemas/PatchRoleRequest"
 							}
 						}
 					}
@@ -1033,7 +1073,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_undefined_"
+									"$ref": "#/components/schemas/DeleteRoleResponse"
 								}
 							}
 						}
@@ -1069,7 +1109,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_UserResponse_"
+									"$ref": "#/components/schemas/GetCurrentUserResponse"
 								}
 							}
 						}
@@ -1093,7 +1133,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_UserResponse_"
+									"$ref": "#/components/schemas/PatchCurrentUserResponse"
 								}
 							}
 						}
@@ -1113,7 +1153,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/UpdateUserRequest"
+								"$ref": "#/components/schemas/PatchCurrentUserRequest"
 							}
 						}
 					}
@@ -1129,7 +1169,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_AuthResponse_"
+									"$ref": "#/components/schemas/PostLoginResponse"
 								}
 							}
 						}
@@ -1145,7 +1185,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/LoginRequest"
+								"$ref": "#/components/schemas/PostLoginRequest"
 							}
 						}
 					}
@@ -1161,7 +1201,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_AuthResponse_"
+									"$ref": "#/components/schemas/PostRefreshResponse"
 								}
 							}
 						}
@@ -1192,7 +1232,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_undefined_"
+									"$ref": "#/components/schemas/PostLogoutResponse"
 								}
 							}
 						}
@@ -1223,7 +1263,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponse_RegisterResponse_"
+									"$ref": "#/components/schemas/PostRegisterResponse"
 								}
 							}
 						}
@@ -1239,7 +1279,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/RegisterRequest"
+								"$ref": "#/components/schemas/PostRegisterRequest"
 							}
 						}
 					}

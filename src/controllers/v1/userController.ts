@@ -1,12 +1,19 @@
 import { Controller, Delete, Get, Patch, Path, Post, Query, Route, Security, Tags } from 'tsoa';
-import { CreateUserRequest, UpdateUserRequest, UserResponse } from '../../dto';
-import { HttpPaginateResponse, HttpResponse } from '../../common/types/http';
 import { StatusCodes } from 'http-status-codes';
 import { UserService } from '../../services';
-import { createUserSchema, updateUserSchema } from '../../schema/userSchema';
+import { createUserSchema, updateUserSchema } from '../../schema';
 import { Body, ValidateBody } from '../../decorator';
 import { PermissionEnum } from '../../common/enum';
 import { Authorize } from '../../decorator/authorize';
+import {
+    DeleteUserResponse,
+    GetAllUserResponse,
+    GetOneUserResponse,
+    PatchUserRequest,
+    PatchUserResponse,
+    PostUserRequest,
+    PostUserResponse,
+} from '../../dto';
 
 @Route('users')
 @Tags('User Management')
@@ -22,7 +29,7 @@ export class UserController extends Controller {
         @Query() limit: number = 20,
         @Query() name?: string,
         @Query() username?: string,
-    ): Promise<HttpPaginateResponse<UserResponse[]>> {
+    ): Promise<GetAllUserResponse> {
         const result = await UserService.getUsers({
             limit,
             page,
@@ -43,7 +50,7 @@ export class UserController extends Controller {
         values: [PermissionEnum.USER_READ],
     })
     @Get('{userId}')
-    public async getUser(@Path() userId: number): Promise<HttpResponse<UserResponse>> {
+    public async getUser(@Path() userId: number): Promise<GetOneUserResponse> {
         const data = await UserService.getOne(userId);
 
         return {
@@ -59,9 +66,7 @@ export class UserController extends Controller {
         values: [PermissionEnum.USER_CREATE],
     })
     @ValidateBody(createUserSchema)
-    public async createUser(
-        @Body() request: CreateUserRequest,
-    ): Promise<HttpResponse<UserResponse>> {
+    public async createUser(@Body() request: PostUserRequest): Promise<PostUserResponse> {
         const data = await UserService.createUser(request);
 
         this.setStatus(StatusCodes.CREATED);
@@ -80,8 +85,8 @@ export class UserController extends Controller {
     })
     public async updateUser(
         @Path() userId: number,
-        @Body() body: UpdateUserRequest,
-    ): Promise<HttpResponse<UserResponse>> {
+        @Body() body: PatchUserRequest,
+    ): Promise<PatchUserResponse> {
         const data = await UserService.updateUser(body, userId);
 
         return {
@@ -96,7 +101,7 @@ export class UserController extends Controller {
         type: 'permission',
         values: [PermissionEnum.USER_DELETE],
     })
-    public async deleteUser(@Path() userId: number): Promise<HttpResponse<undefined>> {
+    public async deleteUser(@Path() userId: number): Promise<DeleteUserResponse> {
         await UserService.deleteUser(userId);
 
         return {

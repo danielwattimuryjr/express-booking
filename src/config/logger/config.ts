@@ -7,10 +7,6 @@ const isProduction = process.env.NODE_ENV === 'production';
 const LOG_DIR = process.env.LOG_DIR || path.join(process.cwd(), 'logs');
 const LOG_LEVEL = process.env.LOG_LEVEL || (isProduction ? 'info' : 'debug');
 
-/**
- * Keys that must NEVER show up in logs, regardless of nesting depth.
- * Extend this list as your domain models grow.
- */
 const SENSITIVE_KEYS = new Set([
     'password',
     'newpassword',
@@ -29,21 +25,56 @@ const SENSITIVE_KEYS = new Set([
     'ssn',
 ]);
 
-function redact(value: unknown, seen: WeakSet<object> = new WeakSet()): unknown {
-    if (value === null || typeof value !== 'object') return value;
+// Priority key order for the final log object, e.g. { timestamp, level, message, requestId, userId, ...rest }
+const KEY_ORDER = ['timestamp', 'level', 'message', 'requestId', 'userId', 'stack'];
+
+/**
+ * Turns an Error instance into a plain, JSON-serializable object.
+ * Without this, `JSON.stringify(someError)` produces `{}` because
+ * `message` and `stack` are non-enumerable own properties on Error.
+ */
+function serializeError(err: Error, seen: WeakSet<object>): Record<string, unknown> {
+    const { name, message, stack, ...rest } = err as unknown as Record<string, unknown> & Error;
+    return {
+        name,
+        message,
+        stack,
+        // preserve any custom fields attached to the error (err.code, err.statusCode, etc.)
+        ...(Object.keys(rest).length
+            ? (serializeValue(rest, seen) as Record<string, unknown>)
+            : {}),
+    };
+}
+
+/**
+ * Recursively walks a value, redacting sensitive keys and converting
+ * Error instances into plain serializable objects. Handles circular refs.
+ */
+function serializeValue(value: unknown, seen: WeakSet<object> = new WeakSet()): unknown {
+    if (value === null || value === undefined) return value;
+
+    if (value instanceof Error) {
+        if (seen.has(value)) return '[Circular]';
+        seen.add(value);
+        return serializeError(value, seen);
+    }
+
+    if (typeof value !== 'object') return value;
+
     if (seen.has(value as object)) return '[Circular]';
     seen.add(value as object);
 
-    if (Array.isArray(value)) return value.map((item) => redact(item, seen));
+    if (Array.isArray(value)) return value.map((item) => serializeValue(item, seen));
 
     const result: Record<string, unknown> = {};
     for (const [key, val] of Object.entries(value as Record<string, unknown>)) {
-        result[key] = SENSITIVE_KEYS.has(key.toLowerCase()) ? '[REDACTED]' : redact(val, seen);
+        result[key] = SENSITIVE_KEYS.has(key.toLowerCase())
+            ? '[REDACTED]'
+            : serializeValue(val, seen);
     }
     return result;
 }
 
-/** Injects the correlation id + authenticated user (if any) from AsyncLocalStorage. */
 const contextFormat = winston.format((info) => {
     const requestId = getRequestId();
     const userId = getContextUser();
@@ -57,10 +88,25 @@ const redactFormat = winston.format((info) => {
 
     for (const key of Object.keys(info)) {
         if (!reservedKeys.has(key)) {
-            info[key] = redact(info[key]);
+            info[key] = serializeValue(info[key]);
         }
     }
 
+    return info;
+});
+
+// Rebuilds key insertion order so JSON output is always
+// { timestamp, level, message, requestId?, userId?, stack?, ...rest }
+// instead of whatever order fields happened to be attached in.
+const orderFormat = winston.format((info) => {
+    const rest = Object.keys(info).filter((key) => !KEY_ORDER.includes(key));
+    for (const key of [...KEY_ORDER, ...rest]) {
+        if (key in info) {
+            const val = info[key];
+            delete info[key];
+            info[key] = val;
+        }
+    }
     return info;
 });
 
@@ -72,7 +118,8 @@ const devFormat = winston.format.combine(
     winston.format.colorize(),
     winston.format.printf(({ timestamp, level, message, requestId, stack, ...meta }) => {
         const reqIdStr = requestId ? ` [${requestId}]` : '';
-        const metaStr = Object.keys(meta).length ? ` ${JSON.stringify(meta)}` : '';
+        // Pretty-print meta so nested objects (e.g. serialized errors) are actually readable
+        const metaStr = Object.keys(meta).length ? `\n${JSON.stringify(meta, null, 2)}` : '';
         return `${timestamp} ${level}${reqIdStr}: ${stack || message}${metaStr}`;
     }),
 );
@@ -82,6 +129,7 @@ const prodFormat = winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
     redactFormat(),
+    orderFormat(),
     winston.format.json(),
 );
 

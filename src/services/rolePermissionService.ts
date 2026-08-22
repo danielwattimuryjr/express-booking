@@ -1,9 +1,9 @@
 import { In } from 'typeorm';
 import { PermissionEnum } from '../common/enum';
-import { NotFoundError } from '../common/error';
+import { NotFoundError } from '../error';
 import { AppDataSource } from '../config/database';
-import { Permission, Role } from '../entitites';
-import { PermissionRepository, RoleRepository } from '../repositories';
+import { Permission, Role } from '../entities';
+import { PermissionRepository } from '../repositories';
 
 export class RolePermissionService {
     private static toPermissionResponse(permissions: Permission[]) {

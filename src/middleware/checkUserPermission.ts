@@ -1,6 +1,6 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import passport from 'passport';
-import { ForbiddenError, UnauthorizedError } from '../common/error';
+import { ForbiddenError, UnauthorizedError } from '../error';
 import { RoleEnum } from '../common/enum';
 import { PermissionEnum } from '../common/enum/PermissionEnum';
 

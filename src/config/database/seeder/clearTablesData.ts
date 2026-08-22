@@ -1,5 +1,5 @@
 import { AppDataSource } from '../typeorm';
-import { Permission, Role, User } from '../../../entitites';
+import { Permission, Role, User } from '../../../entities';
 
 export async function clearTablesData() {
     await AppDataSource.createQueryBuilder().delete().from('role_permissions').execute();

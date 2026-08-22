@@ -1,8 +1,8 @@
-import { DEFAULT_LIMIT, DEFAULT_PAGE, MAX_LIMIT } from '../common/const';
-import { NotFoundError } from '../common/error';
-import { PaginationQuery, RoleRequest, SearchRoleQuery } from '../dto';
-import { Role } from '../entitites';
+import { DEFAULT_LIMIT, DEFAULT_PAGE, MAX_LIMIT } from '../const';
+import { NotFoundError } from '../error';
+import { Role } from '../entities';
 import { RoleRepository } from '../repositories';
+import { GetAllRoleQuery, PatchRoleRequest, PostRoleRequest } from '../dto';
 
 export class RoleService {
     private static toRoleResponse(role: Role) {
@@ -13,11 +13,7 @@ export class RoleService {
         };
     }
 
-    static async listRoles({
-        page = DEFAULT_PAGE,
-        limit = DEFAULT_LIMIT,
-        name,
-    }: PaginationQuery & SearchRoleQuery) {
+    static async listRoles({ page = DEFAULT_PAGE, limit = DEFAULT_LIMIT, name }: GetAllRoleQuery) {
         const normalizedPage = Math.max(1, page);
         const normalizedLimit = Math.min(Math.max(1, limit), MAX_LIMIT);
 
@@ -46,7 +42,7 @@ export class RoleService {
         return this.toRoleResponse(role);
     }
 
-    static async createRole(body: RoleRequest) {
+    static async createRole(body: PostRoleRequest) {
         const role = RoleRepository.create({
             name: body.name,
             description: body.description,
@@ -56,7 +52,7 @@ export class RoleService {
         return this.toRoleResponse(role);
     }
 
-    static async updateRole({ name, description }: RoleRequest, roleId: number) {
+    static async updateRole({ name, description }: PatchRoleRequest, roleId: number) {
         const role = await this.getRole(roleId);
         role.name = name;
         role.description = description ?? null;

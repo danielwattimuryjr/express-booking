@@ -1,10 +1,13 @@
 import { Body, Controller, Get, Path, Put, Route, Security, Tags } from 'tsoa';
 import { Authorize } from '../../decorator/authorize';
 import { PermissionEnum } from '../../common/enum';
-import { HttpResponse } from '../../common/types/http';
-import { RolePermissionRequest, RolePermissionResponse } from '../../dto';
 import { RolePermissionService } from '../../services';
 import { StatusCodes } from 'http-status-codes';
+import {
+    GetRolePermissionResponse,
+    PutRolePermissionRequest,
+    PutRolePermissionResponse,
+} from '../../dto';
 
 @Route('roles/{roleId}/permissions')
 @Tags('Roles & Permissions')
@@ -17,7 +20,7 @@ export class RolePermissionController extends Controller {
     })
     public async getRoleWithAllPermissions(
         @Path() roleId: number,
-    ): Promise<HttpResponse<RolePermissionResponse[]>> {
+    ): Promise<GetRolePermissionResponse> {
         const data = await RolePermissionService.listPermissions(roleId);
 
         return {
@@ -34,8 +37,8 @@ export class RolePermissionController extends Controller {
     })
     public async putRoleWithPermissions(
         @Path() roleId: number,
-        @Body() body: RolePermissionRequest,
-    ): Promise<HttpResponse<RolePermissionResponse[]>> {
+        @Body() body: PutRolePermissionRequest,
+    ): Promise<PutRolePermissionResponse> {
         const data = await RolePermissionService.syncPermissions(roleId, body.permissions);
 
         return {

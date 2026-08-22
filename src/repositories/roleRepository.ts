@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { Role } from '../entitites';
+import { Role } from '../entities';
 import { AppDataSource } from '../config/database';
 
 class RoleRepositoryClass extends Repository<Role> {

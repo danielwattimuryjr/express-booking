@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { Permission } from '../entitites';
+import { Permission } from '../entities';
 import { AppDataSource } from '../config/database';
 
 class PermissionRepositoryClass extends Repository<Permission> {

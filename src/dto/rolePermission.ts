@@ -1,9 +1,14 @@
 import z from 'zod';
-import { updateRolePermissionSchema } from '../schema/rolePermissionSchema';
+import { updateRolePermissionSchema } from '../schema';
+import { HttpResponse } from '.';
 
-export type RolePermissionResponse = {
+type RolePermissionResponse = {
     id: number;
     name: string;
     description: string | null;
 };
-export type RolePermissionRequest = z.infer<typeof updateRolePermissionSchema>;
+
+export type GetRolePermissionResponse = HttpResponse<RolePermissionResponse[]>;
+
+export type PutRolePermissionRequest = z.infer<typeof updateRolePermissionSchema>;
+export type PutRolePermissionResponse = HttpResponse<RolePermissionResponse[]>;

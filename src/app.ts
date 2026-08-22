@@ -3,13 +3,14 @@ import cors from 'cors';
 import express, { type Express } from 'express';
 import { xss } from 'express-xss-sanitizer';
 import helmet from 'helmet';
-import { errorHandler, notFoundHandler } from './middleware';
-import { RegisterRoutes } from './routes/routes';
+import { notFoundHandler } from './middleware';
 import { RegisterSwagger } from './config/swagger';
 import passport from 'passport';
 import { jwtStrategy } from './config/passport';
 import { requestContextMiddleware } from './middleware/requestContext';
 import { httpLogger } from './middleware/httpLogger';
+import { errorHandler } from './error';
+import { RegisterRoutes } from './generated-routes';
 
 const app: Express = express();
 

@@ -1,13 +1,13 @@
-import { NotFoundError, UnauthorizedError } from '../common/error';
+import { NotFoundError, UnauthorizedError } from '../error';
 import { RoleRepository, UserRepository } from '../repositories';
 import bcrypt from 'bcrypt';
 import { JwtService } from './jwtService';
-import { LoginRequest, RegisterRequest } from '../dto';
 import { RefreshTokenRepository } from '../repositories/refreshTokenRepository';
 import { AppDataSource } from '../config/database';
-import { RefreshToken } from '../entitites';
+import { RefreshToken } from '../entities';
 import { EntityManager } from 'typeorm';
 import { RoleEnum } from '../common/enum';
+import { PostLoginRequest, PostRegisterRequest } from '../dto';
 
 export class AuthService {
     private static async createTokenPair(
@@ -35,7 +35,7 @@ export class AuthService {
         };
     }
 
-    static async login(body: LoginRequest) {
+    static async login(body: PostLoginRequest) {
         const user = await UserRepository.findOneByEmail(body.email);
         if (!user) throw new NotFoundError('User not found');
 
@@ -80,7 +80,7 @@ export class AuthService {
         );
     }
 
-    static async register(body: RegisterRequest) {
+    static async register(body: PostRegisterRequest) {
         const role = await RoleRepository.findOneBy({
             name: RoleEnum.USER,
         });

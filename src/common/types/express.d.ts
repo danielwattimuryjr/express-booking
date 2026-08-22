@@ -1,8 +1,8 @@
-import { AuthenticatedUser } from './http';
+import { AuthenticatedUserRequest } from '../../dto';
 
 declare global {
     namespace Express {
-        interface User extends AuthenticatedUser {}
+        interface User extends AuthenticatedUserRequest {}
     }
 }
 

@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import config from '../config';
-import { Permission, RefreshToken, Role, User } from '../../entitites';
+import { Permission, RefreshToken, Role, User } from '../../entities';
 import { TypeOrmWinstonLogger } from '../logger';
 
 export const AppDataSource = new DataSource({

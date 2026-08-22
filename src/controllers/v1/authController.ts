@@ -1,18 +1,34 @@
 import { Controller, Header, Post, Route, Tags } from 'tsoa';
 import { Body, ValidateBody } from '../../decorator';
-import { HttpResponse } from '../../common/types/http';
-import { LoginRequest, AuthResponse, RegisterRequest, RegisterResponse } from '../../dto';
 import { StatusCodes } from 'http-status-codes';
 import { AuthService } from '../../services';
 import { loginSchema, registerSchema } from '../../schema';
-import { extractBearerToken } from '../../common/utils';
+import {
+    PostLoginRequest,
+    PostLoginResponse,
+    PostLogoutResponse,
+    PostRefreshResponse,
+    PostRegisterRequest,
+    PostRegisterResponse,
+} from '../../dto';
+import { UnauthorizedError } from '../../error';
 
 @Route('auth')
 @Tags('Authentication')
 export class AuthController extends Controller {
+    private extractBearerToken(authorization: string): string {
+        const [scheme, token] = authorization.split(' ');
+
+        if (scheme !== 'Bearer' || !token) {
+            throw new UnauthorizedError();
+        }
+
+        return token;
+    }
+
     @Post('login')
     @ValidateBody(loginSchema)
-    public async login(@Body() body: LoginRequest): Promise<HttpResponse<AuthResponse>> {
+    public async login(@Body() body: PostLoginRequest): Promise<PostLoginResponse> {
         const data = await AuthService.login(body);
 
         return {
@@ -25,8 +41,8 @@ export class AuthController extends Controller {
     @Post('refresh')
     public async refresh(
         @Header('X-Refresh-Token') refreshToken: string,
-    ): Promise<HttpResponse<AuthResponse>> {
-        const token = extractBearerToken(refreshToken);
+    ): Promise<PostRefreshResponse> {
+        const token = this.extractBearerToken(refreshToken);
         const data = await AuthService.refresh(token);
 
         return {
@@ -39,8 +55,8 @@ export class AuthController extends Controller {
     @Post('logout')
     public async logout(
         @Header('X-Refresh-Token') refreshToken: string,
-    ): Promise<HttpResponse<undefined>> {
-        const token = extractBearerToken(refreshToken);
+    ): Promise<PostLogoutResponse> {
+        const token = this.extractBearerToken(refreshToken);
         await AuthService.logout(token);
 
         return {
@@ -51,7 +67,7 @@ export class AuthController extends Controller {
 
     @Post('register')
     @ValidateBody(registerSchema)
-    public async register(@Body() body: RegisterRequest): Promise<HttpResponse<RegisterResponse>> {
+    public async register(@Body() body: PostRegisterRequest): Promise<PostRegisterResponse> {
         const user = await AuthService.register(body);
 
         this.setStatus(StatusCodes.CREATED);

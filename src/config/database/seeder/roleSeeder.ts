@@ -1,6 +1,6 @@
 import { RoleEnum } from '../../../common/enum';
 import { AppDataSource } from '../typeorm';
-import { Role } from '../../../entitites';
+import { Role } from '../../../entities';
 import { seedEnum } from './core/seedEnum';
 
 export async function seedRoles() {

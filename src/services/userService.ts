@@ -1,10 +1,10 @@
-import { NotFoundError } from '../common/error';
+import { NotFoundError } from '../error';
 import { RoleRepository, UserRepository } from '../repositories';
 import bcrypt from 'bcrypt';
 import { RoleEnum } from '../common/enum';
-import { CreateUserRequest, PaginationQuery, SearchUserQuery, UpdateUserRequest } from '../dto';
-import { DEFAULT_LIMIT, DEFAULT_PAGE, MAX_LIMIT } from '../common/const';
-import { User } from '../entitites';
+import { DEFAULT_LIMIT, DEFAULT_PAGE, MAX_LIMIT } from '../const';
+import { User } from '../entities';
+import { GetAllUserQuery, PatchUserRequest, PostUserRequest } from '../dto';
 
 export class UserService {
     private static toUserResponse(user: User) {
@@ -22,7 +22,7 @@ export class UserService {
         limit = DEFAULT_LIMIT,
         name,
         username,
-    }: PaginationQuery & SearchUserQuery) {
+    }: GetAllUserQuery) {
         const normalizedPage = Math.max(1, page);
         const normalizedLimit = Math.min(Math.max(1, limit), MAX_LIMIT);
 
@@ -52,7 +52,7 @@ export class UserService {
         return this.toUserResponse(user);
     }
 
-    static async createUser(request: CreateUserRequest) {
+    static async createUser(request: PostUserRequest) {
         const role = await RoleRepository.findOneBy({
             name: RoleEnum.USER,
         });
@@ -72,7 +72,7 @@ export class UserService {
         return user;
     }
 
-    static async updateUser(request: UpdateUserRequest, userId: number) {
+    static async updateUser(request: PatchUserRequest, userId: number) {
         const user = await this.getOne(userId);
         user.email = request.email;
         user.firstName = request.firstName;

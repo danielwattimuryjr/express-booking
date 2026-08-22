@@ -55,4 +55,4 @@ Thumbs.db
 *~
 
 # TSOA generated routes
-src/routes/routes.ts
+generated-routes.ts

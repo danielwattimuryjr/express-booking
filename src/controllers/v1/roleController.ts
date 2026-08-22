@@ -13,12 +13,19 @@ import {
 } from 'tsoa';
 import { Authorize } from '../../decorator/authorize';
 import { PermissionEnum } from '../../common/enum';
-import { HttpPaginateResponse, HttpResponse } from '../../common/types/http';
-import { RoleRequest, RoleResponse } from '../../dto';
 import { RoleService } from '../../services';
 import { StatusCodes } from 'http-status-codes';
 import { ValidateBody } from '../../decorator';
 import { roleRequestSchema } from '../../schema';
+import {
+    DeleteRoleResponse,
+    GetAllRoleResponse,
+    GetOneRoleResponse,
+    PatchRoleRequest,
+    PatchRoleResponse,
+    PostRoleRequest,
+    PostRoleResponse,
+} from '../../dto';
 
 @Route('roles')
 @Tags('Roles & Permissions')
@@ -33,7 +40,7 @@ export class RoleController extends Controller {
         @Query() page: number = 1,
         @Query() limit: number = 20,
         @Query() name?: string,
-    ): Promise<HttpPaginateResponse<RoleResponse[]>> {
+    ): Promise<GetAllRoleResponse> {
         const { data, pagination } = await RoleService.listRoles({
             limit,
             page,
@@ -53,7 +60,7 @@ export class RoleController extends Controller {
         type: 'permission',
         values: [PermissionEnum.ROLE_READ],
     })
-    public async getOneRole(@Path() roleId: number): Promise<HttpResponse<RoleResponse>> {
+    public async getOneRole(@Path() roleId: number): Promise<GetOneRoleResponse> {
         const data = await RoleService.getRole(roleId);
 
         return {
@@ -69,7 +76,7 @@ export class RoleController extends Controller {
         values: [PermissionEnum.ROLE_CREATE],
     })
     @ValidateBody(roleRequestSchema)
-    public async postRole(@Body() body: RoleRequest): Promise<HttpResponse<RoleResponse>> {
+    public async postRole(@Body() body: PostRoleRequest): Promise<PostRoleResponse> {
         const data = await RoleService.createRole(body);
 
         return {
@@ -87,8 +94,8 @@ export class RoleController extends Controller {
     @ValidateBody(roleRequestSchema)
     public async patchRole(
         @Path() roleId: number,
-        @Body() body: RoleRequest,
-    ): Promise<HttpResponse<RoleResponse>> {
+        @Body() body: PatchRoleRequest,
+    ): Promise<PatchRoleResponse> {
         const data = await RoleService.updateRole(body, roleId);
 
         return {
@@ -103,7 +110,7 @@ export class RoleController extends Controller {
         type: 'permission',
         values: [PermissionEnum.ROLE_DELETE],
     })
-    public async deleteRole(@Path() roleId: number): Promise<HttpResponse<undefined>> {
+    public async deleteRole(@Path() roleId: number): Promise<DeleteRoleResponse> {
         await RoleService.deleteRole(roleId);
 
         return {

@@ -1,6 +1,6 @@
 import { RoleEnum, PermissionEnum } from '../../../common/enum';
 import { AppDataSource } from '../typeorm';
-import { Permission, Role } from '../../../entitites';
+import { Permission, Role } from '../../../entities';
 
 const rolePermissions: Record<RoleEnum, PermissionEnum[]> = {
     [RoleEnum.ADMIN]: Object.values(PermissionEnum),

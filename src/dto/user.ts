@@ -1,19 +1,21 @@
 import z from 'zod';
-import { createUserSchema, updateUserSchema } from '../schema/userSchema';
+import { HttpPaginateResponse, HttpResponse, PaginationQuery, UserResponse } from '.';
+import { createUserSchema, updateUserSchema } from '../schema';
 
-export type UserResponse = {
-    id: number;
-    firstName: string;
-    lastName: string | null;
-    email: string;
-    username: string;
-};
-
-export type CreateUserRequest = z.infer<typeof createUserSchema>;
-
-export type UpdateUserRequest = z.infer<typeof updateUserSchema>;
-
-export type SearchUserQuery = {
+type SearchUserQuery = {
     name?: string;
     username?: string;
 };
+
+export type GetAllUserQuery = PaginationQuery & SearchUserQuery;
+export type GetAllUserResponse = HttpPaginateResponse<UserResponse[]>;
+
+export type GetOneUserResponse = HttpResponse<UserResponse>;
+
+export type PostUserRequest = z.infer<typeof createUserSchema>;
+export type PostUserResponse = HttpResponse<UserResponse>;
+
+export type PatchUserRequest = z.infer<typeof updateUserSchema>;
+export type PatchUserResponse = HttpResponse<UserResponse>;
+
+export type DeleteUserResponse = HttpResponse<undefined>;

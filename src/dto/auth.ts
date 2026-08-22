@@ -1,17 +1,18 @@
-import { Expose } from 'class-transformer';
 import z from 'zod';
 import { loginSchema, registerSchema } from '../schema';
-import { UserResponse } from './user';
+import { HttpResponse, UserResponse } from '.';
 
-export class AuthResponse {
-    @Expose()
+type AuthResponse = {
     accessToken: string;
-
-    @Expose()
     refreshToken: string;
-}
+};
 
-export type LoginRequest = z.infer<typeof loginSchema>;
+export type PostLoginRequest = z.infer<typeof loginSchema>;
+export type PostLoginResponse = HttpResponse<AuthResponse>;
 
-export type RegisterRequest = z.infer<typeof registerSchema>;
-export type RegisterResponse = UserResponse;
+export type PostRefreshResponse = HttpResponse<AuthResponse>;
+
+export type PostRegisterRequest = z.infer<typeof registerSchema>;
+export type PostRegisterResponse = HttpResponse<UserResponse>;
+
+export type PostLogoutResponse = HttpResponse<undefined>;

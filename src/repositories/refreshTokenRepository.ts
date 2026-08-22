@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { RefreshToken } from '../entitites';
+import { RefreshToken } from '../entities';
 import { AppDataSource } from '../config/database';
 
 class RefreshTokenRepositoryClass extends Repository<RefreshToken> {
