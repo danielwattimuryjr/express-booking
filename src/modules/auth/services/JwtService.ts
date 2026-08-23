@@ -2,10 +2,7 @@ import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import config from '../../../config/config';
 import { UnauthorizedError } from '../../../common/errors';
-
-import type { AccessTokenPayload, RefreshTokenPayload } from '../types/AuthTypes';
-
-export { AccessTokenPayload, RefreshTokenPayload } from '../types/AuthTypes';
+import { AccessTokenPayload, RefreshTokenPayload } from '../types/AuthTypes';
 
 export class JwtService {
     private static readonly ACCESS_TOKEN_EXPIRES_IN_MINUTES = config.JWT_ACCESS_EXPIRATION_MINUTES;

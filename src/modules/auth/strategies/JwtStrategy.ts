@@ -1,7 +1,7 @@
 import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';
 import config from '../../../config/config';
 import { UserRepository } from '../../users/repositories/UserRepository';
-import { AccessTokenPayload } from '../services/JwtService';
+import { AccessTokenPayload } from '../types/AuthTypes';
 
 export const jwtStrategy = new Strategy(
     {
