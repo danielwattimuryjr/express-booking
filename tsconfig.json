@@ -34,6 +34,6 @@
         "types": ["jest"],
         "typeRoots": ["./types", "./node_modules/@types"]
     },
-    "exclude": ["node_modules", "dist", "build"],
-    "include": ["./src/**/*.ts", "./src/**/*.tsx"]
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
 }
