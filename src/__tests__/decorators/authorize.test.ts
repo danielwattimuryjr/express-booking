@@ -1,9 +1,9 @@
 import { Middlewares } from 'tsoa';
 import { PermissionEnum, RoleEnum } from '../../common/enum';
-import { Authorize } from '../../decorator/authorize';
-import { AuthorizationPolicy, checkUserPermissionMiddleware } from '../../middleware';
+import { Authorize } from '../../common/decorators/authorize';
+import { AuthorizationPolicy, checkUserPermissionMiddleware } from '../../common/middleware';
 
-jest.mock('../../middleware');
+jest.mock('../../common/middleware');
 jest.mock('tsoa');
 
 describe('Authorize Decorator', () => {

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
-jest.mock('../../middleware/requestContext');
-jest.mock('../../config/logger/config', () => ({
+jest.mock('../../common/middleware/requestContext');
+jest.mock('../../infrastructure/logger/Logger', () => ({
     log: jest.fn(),
     http: jest.fn(),
 }));
@@ -27,9 +27,9 @@ describe('HttpLogger Middleware', () => {
     // httpLogger.ts actually calls internally.
     async function loadHttpLogger() {
         const morganModule = await import('morgan');
-        const requestContextModule = await import('../../middleware/requestContext');
-        const loggerModule = await import('../../config/logger/config');
-        const { httpLogger } = await import('../../middleware/httpLogger');
+        const requestContextModule = await import('../../common/middleware/requestContext');
+        const loggerModule = await import('../../infrastructure/logger/Logger');
+        const { httpLogger } = await import('../../common/middleware/httpLogger');
 
         const morganMock = morganModule.default as unknown as jest.Mock & {
             token: jest.Mock;

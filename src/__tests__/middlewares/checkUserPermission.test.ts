@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
-import { ForbiddenError, UnauthorizedError } from '../../error';
+import { ForbiddenError, UnauthorizedError } from '../../common/errors';
 import { RoleEnum, PermissionEnum } from '../../common/enum';
-import { AuthorizationPolicy, checkUserPermissionMiddleware } from '../../middleware';
+import { AuthorizationPolicy, checkUserPermissionMiddleware } from '../../common/middleware';
 
 jest.mock('passport');
 
