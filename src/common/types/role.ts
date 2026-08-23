@@ -13,7 +13,7 @@ type SearchRoleQuery = {
 };
 
 export type GetAllRoleQuery = PaginationQuery & SearchRoleQuery;
-export type GetAllRoleResponse = HttpPaginateResponse<RoleResponse[]>;
+export type GetAllRoleResponse = HttpPaginateResponse<RoleResponse>;
 
 export type GetOneRoleResponse = HttpResponse<RoleResponse>;
 

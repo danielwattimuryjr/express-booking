@@ -34,7 +34,7 @@ export type HttpResponse<TData = undefined> = TData extends undefined
 export interface HttpPaginateResponse<TData> {
     message: string;
     code: StatusCodes;
-    data: TData;
+    data: TData[];
     pagination: PaginationMetadata;
 }
 

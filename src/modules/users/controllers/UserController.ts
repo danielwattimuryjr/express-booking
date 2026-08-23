@@ -50,7 +50,7 @@ export class UserController extends Controller {
         values: [PermissionEnum.USER_READ],
     })
     @Get('{userId}')
-    public async getUser(@Path() userId: number): Promise<GetOneUserResponse> {
+    public async getOneUser(@Path() userId: number): Promise<GetOneUserResponse> {
         const data = await UserService.getOne(userId);
 
         return {

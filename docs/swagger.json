@@ -126,7 +126,7 @@
 				],
 				"type": "object"
 			},
-			"HttpPaginateResponse_UserResponse-Array_": {
+			"HttpPaginateResponse_UserResponse_": {
 				"properties": {
 					"message": {
 						"type": "string"
@@ -154,7 +154,7 @@
 				"additionalProperties": false
 			},
 			"GetAllUserResponse": {
-				"$ref": "#/components/schemas/HttpPaginateResponse_UserResponse-Array_"
+				"$ref": "#/components/schemas/HttpPaginateResponse_UserResponse_"
 			},
 			"HttpResponse_UserResponse_": {
 				"properties": {
@@ -368,7 +368,11 @@
 					"booking.read",
 					"booking.create",
 					"booking.update",
-					"booking.cancel"
+					"booking.cancel",
+					"hotel.read",
+					"hotel.create",
+					"hotel.update",
+					"hotel.delete"
 				],
 				"type": "string"
 			},
@@ -410,7 +414,7 @@
 				],
 				"type": "object"
 			},
-			"HttpPaginateResponse_RoleResponse-Array_": {
+			"HttpPaginateResponse_RoleResponse_": {
 				"properties": {
 					"message": {
 						"type": "string"
@@ -438,7 +442,7 @@
 				"additionalProperties": false
 			},
 			"GetAllRoleResponse": {
-				"$ref": "#/components/schemas/HttpPaginateResponse_RoleResponse-Array_"
+				"$ref": "#/components/schemas/HttpPaginateResponse_RoleResponse_"
 			},
 			"HttpResponse_RoleResponse_": {
 				"properties": {
@@ -489,6 +493,338 @@
 				"$ref": "#/components/schemas/infer_typeofroleRequestSchema_"
 			},
 			"DeleteRoleResponse": {
+				"$ref": "#/components/schemas/HttpResponse_undefined_"
+			},
+			"HotelResponse": {
+				"properties": {
+					"isActive": {
+						"type": "boolean"
+					},
+					"starRating": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"phone": {
+						"type": "string",
+						"nullable": true
+					},
+					"email": {
+						"type": "string",
+						"nullable": true
+					},
+					"description": {
+						"type": "string",
+						"nullable": true
+					},
+					"slug": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"isActive",
+					"starRating",
+					"phone",
+					"email",
+					"description",
+					"slug",
+					"name",
+					"id"
+				],
+				"type": "object"
+			},
+			"HttpPaginateResponse_HotelResponse_": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"code": {
+						"$ref": "#/components/schemas/StatusCodes"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/HotelResponse"
+						},
+						"type": "array"
+					},
+					"pagination": {
+						"$ref": "#/components/schemas/PaginationMetadata"
+					}
+				},
+				"required": [
+					"message",
+					"code",
+					"data",
+					"pagination"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetAllHotelResponse": {
+				"$ref": "#/components/schemas/HttpPaginateResponse_HotelResponse_"
+			},
+			"AddressResponse": {
+				"properties": {
+					"location": {
+						"properties": {
+							"longitude": {
+								"type": "number",
+								"format": "double"
+							},
+							"latitude": {
+								"type": "number",
+								"format": "double"
+							}
+						},
+						"required": [
+							"longitude",
+							"latitude"
+						],
+						"type": "object"
+					},
+					"state": {
+						"type": "string",
+						"nullable": true
+					},
+					"postalCode": {
+						"type": "string",
+						"nullable": true
+					},
+					"country": {
+						"type": "string"
+					},
+					"city": {
+						"type": "string"
+					},
+					"addressLine2": {
+						"type": "string",
+						"nullable": true
+					},
+					"addressLine1": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"location",
+					"state",
+					"postalCode",
+					"country",
+					"city",
+					"addressLine2",
+					"addressLine1"
+				],
+				"type": "object"
+			},
+			"HttpResponse_HotelResponse-and-_address-AddressResponse__": {
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/HotelResponse"
+							},
+							{
+								"properties": {
+									"address": {
+										"$ref": "#/components/schemas/AddressResponse"
+									}
+								},
+								"required": [
+									"address"
+								],
+								"type": "object"
+							}
+						]
+					},
+					"code": {
+						"$ref": "#/components/schemas/StatusCodes"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"data",
+					"code",
+					"message"
+				],
+				"type": "object"
+			},
+			"GetOneHotelResponse": {
+				"$ref": "#/components/schemas/HttpResponse_HotelResponse-and-_address-AddressResponse__"
+			},
+			"HttpResponse_HotelResponse_": {
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/HotelResponse"
+					},
+					"code": {
+						"$ref": "#/components/schemas/StatusCodes"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"data",
+					"code",
+					"message"
+				],
+				"type": "object"
+			},
+			"PostHotelResponse": {
+				"$ref": "#/components/schemas/HttpResponse_HotelResponse_"
+			},
+			"infer_typeofcreateHotelSchema_": {
+				"properties": {
+					"starRating": {
+						"type": "number",
+						"format": "double"
+					},
+					"phone": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"address": {
+						"properties": {
+							"postalCode": {
+								"type": "string"
+							},
+							"state": {
+								"type": "string"
+							},
+							"addressLine2": {
+								"type": "string"
+							},
+							"location": {
+								"properties": {
+									"longitude": {
+										"type": "number",
+										"format": "double"
+									},
+									"latitude": {
+										"type": "number",
+										"format": "double"
+									}
+								},
+								"required": [
+									"longitude",
+									"latitude"
+								],
+								"type": "object"
+							},
+							"city": {
+								"type": "string"
+							},
+							"country": {
+								"type": "string"
+							},
+							"addressLine1": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"location",
+							"city",
+							"country",
+							"addressLine1"
+						],
+						"type": "object"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"address",
+					"name"
+				],
+				"type": "object"
+			},
+			"PostHotelRequest": {
+				"$ref": "#/components/schemas/infer_typeofcreateHotelSchema_"
+			},
+			"PatchHotelResponse": {
+				"$ref": "#/components/schemas/HttpResponse_HotelResponse_"
+			},
+			"infer_typeofupdateHotelSchema_": {
+				"properties": {
+					"address": {
+						"properties": {
+							"location": {
+								"properties": {
+									"longitude": {
+										"type": "number",
+										"format": "double"
+									},
+									"latitude": {
+										"type": "number",
+										"format": "double"
+									}
+								},
+								"required": [
+									"longitude",
+									"latitude"
+								],
+								"type": "object"
+							},
+							"postalCode": {
+								"type": "string"
+							},
+							"state": {
+								"type": "string"
+							},
+							"city": {
+								"type": "string"
+							},
+							"country": {
+								"type": "string"
+							},
+							"addressLine2": {
+								"type": "string"
+							},
+							"addressLine1": {
+								"type": "string"
+							}
+						},
+						"type": "object"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"starRating": {
+						"type": "number",
+						"format": "double"
+					},
+					"phone": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"PatchHotelRequest": {
+				"$ref": "#/components/schemas/infer_typeofupdateHotelSchema_"
+			},
+			"DeleteHotelResponse": {
 				"$ref": "#/components/schemas/HttpResponse_undefined_"
 			},
 			"AuthResponse": {
@@ -705,7 +1041,7 @@
 		},
 		"/users/{userId}": {
 			"get": {
-				"operationId": "GetUser",
+				"operationId": "GetOneUser",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -1155,6 +1491,206 @@
 						"schema": {
 							"format": "double",
 							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/hotels": {
+			"get": {
+				"operationId": "GetAllHotels",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetAllHotelResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Hotel Management"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 1,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 20,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "name",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "PostHotel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PostHotelResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Hotel Management"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PostHotelRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/hotels/{hotelSlug}": {
+			"get": {
+				"operationId": "GetOneHotel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetOneHotelResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Hotel Management"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "hotelSlug",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "PatchHotel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PatchHotelResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Hotel Management"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "hotelSlug",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PatchHotelRequest"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteHotel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DeleteHotelResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Hotel Management"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "hotelSlug",
+						"required": true,
+						"schema": {
+							"type": "string"
 						}
 					}
 				]

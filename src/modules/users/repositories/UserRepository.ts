@@ -63,7 +63,7 @@ class UserRepositoryClass extends Repository<User> {
 
     async findPaginated(page: number, limit: number, name?: string, username?: string) {
         const query = this.createQueryBuilder('user')
-            .select(['user.id', 'user.first_name', 'user.last_name', 'user.email', 'user.username'])
+            .select(['user.id', 'user.firstName', 'user.lastName', 'user.email', 'user.username'])
             .skip((page - 1) * limit)
             .take(limit)
             .orderBy('user.id', 'ASC');

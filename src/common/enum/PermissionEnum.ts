@@ -13,4 +13,9 @@ export enum PermissionEnum {
     BOOKING_CREATE = 'booking.create',
     BOOKING_UPDATE = 'booking.update',
     BOOKING_CANCEL = 'booking.cancel',
+
+    HOTEL_READ = 'hotel.read',
+    HOTEL_CREATE = 'hotel.create',
+    HOTEL_UPDATE = 'hotel.update',
+    HOTEL_DELETE = 'hotel.delete',
 }

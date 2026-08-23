@@ -8,7 +8,7 @@ type SearchUserQuery = {
 };
 
 export type GetAllUserQuery = PaginationQuery & SearchUserQuery;
-export type GetAllUserResponse = HttpPaginateResponse<UserResponse[]>;
+export type GetAllUserResponse = HttpPaginateResponse<UserResponse>;
 
 export type GetOneUserResponse = HttpResponse<UserResponse>;
 

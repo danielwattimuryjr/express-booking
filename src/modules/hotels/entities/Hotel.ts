@@ -38,7 +38,7 @@ export class Hotel {
 
     @Column({
         type: 'varchar',
-        length: 255,
+        length: 50,
         nullable: true,
     })
     email!: string | null;
@@ -54,6 +54,7 @@ export class Hotel {
         name: 'star_rating',
         type: 'smallint',
         nullable: true,
+        default: 0,
     })
     starRating!: number | null;
 
