@@ -5,6 +5,8 @@ import { RefreshToken } from '../../modules/auth/entities/RefreshToken';
 import { Permission } from '../../modules/roles/entities/Permission';
 import { Role } from '../../modules/roles/entities/Role';
 import { TypeOrmWinstonLogger } from '../logger/TypeOrmLogger';
+import { Hotel } from '../../modules/hotels/entities/Hotel';
+import { HotelAddress } from '../../modules/hotels/entities/HotelAddress';
 
 export const AppDataSource = new DataSource({
     type: 'postgres',
@@ -13,10 +15,10 @@ export const AppDataSource = new DataSource({
     database: config.POSTGRES_DB,
     username: config.POSTGRES_USER,
     password: config.POSTGRES_PASSWORD,
-    synchronize: config.NODE_ENV === 'production' ? false : false,
+    synchronize: config.NODE_ENV === 'production' ? false : true,
     logging: ['query', 'error', 'warn'],
     logger: new TypeOrmWinstonLogger(),
-    entities: [User, Role, RefreshToken, Permission],
+    entities: [User, Role, RefreshToken, Permission, Hotel, HotelAddress],
     subscribers: [],
     migrations: [],
     cache: {
