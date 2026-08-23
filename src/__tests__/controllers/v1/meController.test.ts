@@ -1,11 +1,11 @@
-import { MeController } from './../../../controllers/v1/meController';
-import { UserService } from '../../../services';
+import { MeController } from './../../../modules/users/controllers/MeController';
+import { UserService } from '../../../modules/users/services/UserService';
 import { StatusCodes } from 'http-status-codes';
-import { NotFoundError } from '../../../error';
-import { AuthenticatedUserRequest } from '../../../dto';
+import { NotFoundError } from '../../../common/errors';
+import { AuthenticatedUserRequest } from '../../../common/types';
 
-jest.mock('../../../services');
-jest.mock('../../../decorator', () => ({
+jest.mock('../../../modules/users/services/UserService');
+jest.mock('../../../common/decorators', () => ({
     ValidateBody: (): MethodDecorator => (_target, _propertyKey, descriptor) => descriptor,
     Body: (): ParameterDecorator => (_target, _propertyKey, _parameterIndex) => {},
 }));

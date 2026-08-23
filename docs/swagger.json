@@ -256,6 +256,56 @@
 			"DeleteUserResponse": {
 				"$ref": "#/components/schemas/HttpResponse_undefined_"
 			},
+			"GetCurrentUserResponse": {
+				"$ref": "#/components/schemas/HttpResponse_UserResponse_"
+			},
+			"AuthenticatedUserRequest": {
+				"properties": {
+					"permissions": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"roles": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"username": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"permissions",
+					"roles",
+					"username",
+					"lastName",
+					"firstName",
+					"email",
+					"id"
+				],
+				"type": "object"
+			},
+			"PatchCurrentUserResponse": {
+				"$ref": "#/components/schemas/HttpResponse_UserResponse_"
+			},
+			"PatchCurrentUserRequest": {
+				"$ref": "#/components/schemas/infer_typeofupdateUserSchema_"
+			},
 			"RolePermissionResponse": {
 				"properties": {
 					"description": {
@@ -440,56 +490,6 @@
 			},
 			"DeleteRoleResponse": {
 				"$ref": "#/components/schemas/HttpResponse_undefined_"
-			},
-			"GetCurrentUserResponse": {
-				"$ref": "#/components/schemas/HttpResponse_UserResponse_"
-			},
-			"AuthenticatedUserRequest": {
-				"properties": {
-					"permissions": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					},
-					"roles": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					},
-					"username": {
-						"type": "string"
-					},
-					"lastName": {
-						"type": "string"
-					},
-					"firstName": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					},
-					"id": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"permissions",
-					"roles",
-					"username",
-					"lastName",
-					"firstName",
-					"email",
-					"id"
-				],
-				"type": "object"
-			},
-			"PatchCurrentUserResponse": {
-				"$ref": "#/components/schemas/HttpResponse_UserResponse_"
-			},
-			"PatchCurrentUserRequest": {
-				"$ref": "#/components/schemas/infer_typeofupdateUserSchema_"
 			},
 			"AuthResponse": {
 				"properties": {
@@ -817,6 +817,66 @@
 				]
 			}
 		},
+		"/me": {
+			"get": {
+				"operationId": "GetCurrentUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetCurrentUserResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Current User"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": []
+			},
+			"patch": {
+				"operationId": "UpdateCurrentUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PatchCurrentUserResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Current User"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PatchCurrentUserRequest"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/roles/{roleId}/permissions": {
 			"get": {
 				"operationId": "GetRoleWithAllPermissions",
@@ -1098,66 +1158,6 @@
 						}
 					}
 				]
-			}
-		},
-		"/me": {
-			"get": {
-				"operationId": "GetCurrentUser",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/GetCurrentUserResponse"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Current User"
-				],
-				"security": [
-					{
-						"bearerAuth": []
-					}
-				],
-				"parameters": []
-			},
-			"patch": {
-				"operationId": "UpdateCurrentUser",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/PatchCurrentUserResponse"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Current User"
-				],
-				"security": [
-					{
-						"bearerAuth": []
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/PatchCurrentUserRequest"
-							}
-						}
-					}
-				}
 			}
 		},
 		"/auth/login": {

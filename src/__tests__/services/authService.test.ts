@@ -1,16 +1,18 @@
-import { UserRepository } from '../../repositories';
-import { RefreshTokenRepository } from '../../repositories/refreshTokenRepository';
-import { RoleRepository } from '../../repositories';
-import { AppDataSource } from '../../config/database';
-import { NotFoundError, UnauthorizedError } from '../../error';
+import { UserRepository } from '../../modules/users/repositories/UserRepository';
+import { RefreshTokenRepository } from '../../modules/auth/repositories/RefreshTokenRepository';
+import { RoleRepository } from '../../modules/roles/repositories/RoleRepository';
+import { AppDataSource } from '../../infrastructure/database/data-source';
+import { NotFoundError, UnauthorizedError } from '../../common/errors';
 import bcrypt from 'bcrypt';
-import { JwtService, AuthService } from '../../services';
+import { AuthService } from '../../modules/auth/services/AuthService';
+import { JwtService } from '../../modules/auth/services/JwtService';
 import { EntityManager } from 'typeorm';
 
-jest.mock('../../services/jwtService');
-jest.mock('../../repositories');
-jest.mock('../../repositories/refreshTokenRepository');
-jest.mock('../../config/database');
+jest.mock('../../modules/auth/services/JwtService');
+jest.mock('../../modules/users/repositories/UserRepository');
+jest.mock('../../modules/roles/repositories/RoleRepository');
+jest.mock('../../modules/auth/repositories/RefreshTokenRepository');
+jest.mock('../../infrastructure/database/data-source');
 jest.mock('bcrypt');
 
 describe('AuthService', () => {

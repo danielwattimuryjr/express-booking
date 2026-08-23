@@ -1,11 +1,13 @@
-import { UserService } from '../../services/userService';
-import { UserRepository, RoleRepository } from '../../repositories';
-import { NotFoundError } from '../../error';
+import { UserService } from '../../modules/users/services/UserService';
+import { UserRepository } from '../../modules/users/repositories/UserRepository';
+import { RoleRepository } from '../../modules/roles/repositories/RoleRepository';
+import { NotFoundError } from '../../common/errors';
 import bcrypt from 'bcrypt';
 import { RoleEnum } from '../../common/enum';
-import { DEFAULT_LIMIT } from '../../const';
+import { DEFAULT_LIMIT } from '../../common/utils/constants';
 
-jest.mock('../../repositories');
+jest.mock('../../modules/users/repositories/UserRepository');
+jest.mock('../../modules/roles/repositories/RoleRepository');
 jest.mock('bcrypt');
 
 describe('UserService', () => {
