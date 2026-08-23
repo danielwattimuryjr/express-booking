@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
-import { envSchema } from '../schema';
-import { logger } from './logger';
+import { envSchema } from './env';
+import { logger } from '../infrastructure/logger/Logger';
 
 dotenv.config();
 

@@ -1,7 +1,9 @@
 {
     "entryFile": "src/app.ts",
     "noImplicitAdditionalProperties": "throw-on-extras",
-    "controllerPathGlobs": ["src/**/*Controller.ts"],
+    "controllerPathGlobs": [
+        "src/**/*Controller.ts"
+    ],
     "spec": {
         "outputDirectory": "docs",
         "specVersion": 3,
@@ -17,7 +19,7 @@
     "routes": {
         "routesDir": "src",
         "basePath": "/api/v1",
-        "authenticationModule": "./src/config/authenticate.ts",
+        "authenticationModule": "./src/config/auth.ts",
         "routesFileName": "generated-routes.ts"
     }
 }

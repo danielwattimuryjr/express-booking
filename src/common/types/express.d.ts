@@ -1,4 +1,4 @@
-import { AuthenticatedUserRequest } from '../../dto';
+import { AuthenticatedUserRequest } from '.';
 
 declare global {
     namespace Express {

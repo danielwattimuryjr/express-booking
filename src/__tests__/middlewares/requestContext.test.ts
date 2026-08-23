@@ -5,7 +5,7 @@ import {
     setContextUser,
     getContextUser,
     getRequestStartTime,
-} from '../../middleware/requestContext';
+} from '../../common/middleware/requestContext';
 import { Request, Response, NextFunction } from 'express';
 
 describe('RequestContext Middleware', () => {

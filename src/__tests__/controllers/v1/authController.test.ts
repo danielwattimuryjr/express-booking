@@ -1,10 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
-import { AuthController } from '../../../controllers/v1/authController';
-import { AuthService } from '../../../services';
-import { UnauthorizedError } from '../../../error';
+import { AuthController } from '../../../modules/auth/controllers/AuthController';
+import { AuthService } from '../../../modules/auth/services/AuthService';
+import { UnauthorizedError } from '../../../common/errors';
 
-jest.mock('../../../services');
-jest.mock('../../../decorator', () => ({
+jest.mock('../../../modules/auth/services/AuthService');
+jest.mock('../../../common/decorators', () => ({
     ValidateBody: (): MethodDecorator => (_target, _propertyKey, descriptor) => descriptor,
     Body: (): ParameterDecorator => (_target, _propertyKey, _parameterIndex) => {},
 }));

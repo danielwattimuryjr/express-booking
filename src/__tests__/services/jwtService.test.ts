@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
-import { UnauthorizedError } from '../../error';
+import { UnauthorizedError } from '../../common/errors';
 import config from '../../config/config';
-import { JwtService, AccessTokenPayload, RefreshTokenPayload } from '../../services';
+import { JwtService } from '../../modules/auth/services/JwtService';
+import { AccessTokenPayload, RefreshTokenPayload } from '../../modules/auth/types/AuthTypes';
 
 jest.mock('jsonwebtoken');
 jest.mock('../../config/config', () => ({
