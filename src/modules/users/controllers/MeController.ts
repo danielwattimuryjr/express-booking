@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, RequestProp, Route, Security, Tags } from 'tsoa';
+import { Body, Controller, Get, Put, RequestProp, Route, Security, Tags } from 'tsoa';
 import { Authorize } from '../../../common/decorators/authorize';
 import { UserService } from '../services/UserService';
 import { StatusCodes } from 'http-status-codes';
@@ -7,8 +7,8 @@ import { updateUserSchema } from '../schemas/UserSchema';
 import {
     AuthenticatedUserRequest,
     GetCurrentUserResponse,
-    PatchCurrentUserRequest,
-    PatchCurrentUserResponse,
+    PutCurrentUserRequest,
+    PutCurrentUserResponse,
 } from '../../../common/types';
 
 @Route('me')
@@ -31,12 +31,12 @@ export class MeController extends Controller {
         };
     }
 
-    @Patch()
+    @Put()
     @ValidateBody(updateUserSchema)
     public async updateCurrentUser(
         @RequestProp('user') currentLoggedInUser: AuthenticatedUserRequest,
-        @Body() body: PatchCurrentUserRequest,
-    ): Promise<PatchCurrentUserResponse> {
+        @Body() body: PutCurrentUserRequest,
+    ): Promise<PutCurrentUserResponse> {
         const data = await UserService.updateUser(body, Number(currentLoggedInUser.id));
 
         return {

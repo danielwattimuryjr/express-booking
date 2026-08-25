@@ -31,9 +31,7 @@ export class Role {
     })
     description: string | null;
 
-    @ManyToMany(() => User, (user) => user.roles, {
-        onDelete: 'CASCADE',
-    })
+    @ManyToMany(() => User, (user) => user.roles)
     users: Relation<User[]>;
 
     @ManyToMany(() => Permission, (permission) => permission.roles)

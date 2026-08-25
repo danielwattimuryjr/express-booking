@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import { RoleEnum } from '../../../common/enum';
 import { DEFAULT_LIMIT, DEFAULT_PAGE, MAX_LIMIT } from '../../../common/utils/constants';
 import { User } from '../entities/User';
-import { GetAllUserQuery, PatchUserRequest, PostUserRequest } from '../../../common/types';
+import { GetAllUserQuery, PutUserRequest, PostUserRequest } from '../../../common/types';
 
 export class UserService {
     private static async getUserByIdOrFail(userId: number) {
@@ -59,9 +59,7 @@ export class UserService {
     }
 
     static async createUser(request: PostUserRequest) {
-        const role = await RoleRepository.findOneBy({
-            name: RoleEnum.USER,
-        });
+        const role = await RoleRepository.findOneByName(RoleEnum.USER);
         if (!role) throw new NotFoundError('role with name ROLE_USER not found');
         const hashedPassword = await bcrypt.hash(request.password, 12);
 
@@ -77,7 +75,7 @@ export class UserService {
         return user;
     }
 
-    static async updateUser(request: PatchUserRequest, userId: number) {
+    static async updateUser(request: PutUserRequest, userId: number) {
         const user = await this.getUserByIdOrFail(userId);
 
         user.email = request.email;

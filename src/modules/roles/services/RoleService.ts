@@ -5,6 +5,12 @@ import { RoleRepository } from '../repositories/RoleRepository';
 import { GetAllRoleQuery, PatchRoleRequest, PostRoleRequest } from '../../../common/types';
 
 export class RoleService {
+    private static async getRoleByIdOrFail(id: number) {
+        const role = await RoleRepository.findOneById(id);
+        if (!role) throw new NotFoundError('Role not found');
+        return role;
+    }
+
     private static toRoleResponse(role: Role) {
         return {
             id: role.id,
@@ -36,24 +42,22 @@ export class RoleService {
     }
 
     static async getRole(roleId: number) {
-        const role = await RoleRepository.findById(roleId);
-        if (!role) throw new NotFoundError('Role not found');
+        const role = await this.getRoleByIdOrFail(roleId);
 
         return this.toRoleResponse(role);
     }
 
     static async createRole(body: PostRoleRequest) {
-        const role = RoleRepository.create({
+        const role = await RoleRepository.save({
             name: body.name,
             description: body.description,
         });
-        await RoleRepository.save(role);
 
         return this.toRoleResponse(role);
     }
 
     static async updateRole({ name, description }: PatchRoleRequest, roleId: number) {
-        const role = await this.getRole(roleId);
+        const role = await this.getRoleByIdOrFail(roleId);
         role.name = name;
         role.description = description ?? null;
         await RoleRepository.save(role);
@@ -62,7 +66,7 @@ export class RoleService {
     }
 
     static async deleteRole(roleId: number) {
-        const role = await this.getRole(roleId);
+        const role = await this.getRoleByIdOrFail(roleId);
 
         return await RoleRepository.deleteById(role.id);
     }

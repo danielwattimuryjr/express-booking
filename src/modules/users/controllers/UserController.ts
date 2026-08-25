@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Patch, Path, Post, Query, Route, Security, Tags } from 'tsoa';
+import { Controller, Delete, Get, Path, Post, Put, Query, Route, Security, Tags } from 'tsoa';
 import { StatusCodes } from 'http-status-codes';
 import { UserService } from '../services/UserService';
 import { createUserSchema, updateUserSchema } from '../schemas/UserSchema';
@@ -9,8 +9,8 @@ import {
     DeleteUserResponse,
     GetAllUserResponse,
     GetOneUserResponse,
-    PatchUserRequest,
-    PatchUserResponse,
+    PutUserRequest,
+    PutUserResponse,
     PostUserRequest,
     PostUserResponse,
 } from '../../../common/types';
@@ -77,7 +77,7 @@ export class UserController extends Controller {
         };
     }
 
-    @Patch('{userId}')
+    @Put('{userId}')
     @ValidateBody(updateUserSchema)
     @Authorize({
         type: 'permission',
@@ -85,8 +85,8 @@ export class UserController extends Controller {
     })
     public async updateUser(
         @Path() userId: number,
-        @Body() body: PatchUserRequest,
-    ): Promise<PatchUserResponse> {
+        @Body() body: PutUserRequest,
+    ): Promise<PutUserResponse> {
         const data = await UserService.updateUser(body, userId);
 
         return {

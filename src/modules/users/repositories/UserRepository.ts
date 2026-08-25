@@ -87,7 +87,6 @@ export class UserRepository {
     }
 
     public static async save(user: DeepPartial<User>) {
-        const newUser = this.repository.create(user);
-        return await this.repository.save(newUser);
+        return await this.repository.save(user);
     }
 }
