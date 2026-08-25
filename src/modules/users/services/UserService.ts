@@ -8,6 +8,12 @@ import { User } from '../entities/User';
 import { GetAllUserQuery, PatchUserRequest, PostUserRequest } from '../../../common/types';
 
 export class UserService {
+    private static async getUserByIdOrFail(userId: number) {
+        const user = await UserRepository.findOneById(userId);
+        if (!user) throw new NotFoundError('User not found');
+        return user;
+    }
+
     private static toUserResponse(user: User) {
         return {
             id: user.id,
@@ -47,8 +53,7 @@ export class UserService {
     }
 
     static async getOne(userId: number) {
-        const user = await UserRepository.findById(userId);
-        if (!user) throw new NotFoundError('User not found');
+        const user = await this.getUserByIdOrFail(userId);
 
         return this.toUserResponse(user);
     }
@@ -60,7 +65,7 @@ export class UserService {
         if (!role) throw new NotFoundError('role with name ROLE_USER not found');
         const hashedPassword = await bcrypt.hash(request.password, 12);
 
-        const user = UserRepository.create({
+        const user = await UserRepository.save({
             email: request.email,
             firstName: request.firstName,
             lastName: request.lastName,
@@ -68,24 +73,24 @@ export class UserService {
             username: request.username,
             roles: [role],
         });
-        await UserRepository.save(user);
 
         return user;
     }
 
     static async updateUser(request: PatchUserRequest, userId: number) {
-        const user = await this.getOne(userId);
+        const user = await this.getUserByIdOrFail(userId);
+
         user.email = request.email;
         user.firstName = request.firstName;
         user.lastName = request.lastName ?? null;
         user.username = request.username;
-        await UserRepository.save(user);
+        const updatedUser = await UserRepository.save(user);
 
-        return user;
+        return updatedUser;
     }
 
     static async deleteUser(userId: number) {
-        const user = await this.getOne(userId);
+        const user = await this.getUserByIdOrFail(userId);
 
         return await UserRepository.deleteById(user.id);
     }

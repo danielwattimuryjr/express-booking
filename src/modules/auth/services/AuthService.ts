@@ -89,7 +89,7 @@ export class AuthService {
 
         const password = await bcrypt.hash(body.password, 12);
 
-        const user = UserRepository.create({
+        const user = await UserRepository.save({
             email: body.email,
             firstName: body.firstName,
             lastName: body.lastName,
@@ -97,7 +97,6 @@ export class AuthService {
             password,
             roles: [role],
         });
-        await UserRepository.save(user);
 
         return {
             id: user.id,
