@@ -82,14 +82,12 @@ export class AuthService {
     }
 
     static async register(body: PostRegisterRequest) {
-        const role = await RoleRepository.findOneBy({
-            name: RoleEnum.USER,
-        });
+        const role = await RoleRepository.findOneByName(RoleEnum.USER);
         if (!role) throw new NotFoundError('role with name ROLE_USER not found');
 
         const password = await bcrypt.hash(body.password, 12);
 
-        const user = UserRepository.create({
+        const user = await UserRepository.save({
             email: body.email,
             firstName: body.firstName,
             lastName: body.lastName,
@@ -97,7 +95,6 @@ export class AuthService {
             password,
             roles: [role],
         });
-        await UserRepository.save(user);
 
         return {
             id: user.id,

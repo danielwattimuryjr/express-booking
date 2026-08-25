@@ -1,14 +1,11 @@
-import { Repository } from 'typeorm';
+import { AppDataSource } from '../../../config/database';
 import { Permission } from '../entities/Permission';
-import { AppDataSource } from '../../../infrastructure/database/data-source';
 
-class PermissionRepositoryClass extends Repository<Permission> {
-    constructor() {
-        super(Permission, AppDataSource.manager);
-    }
+export class PermissionRepository {
+    private static readonly repository = AppDataSource.getRepository(Permission);
 
-    async findByRoleId(id: number) {
-        return await this.find({
+    public static async findByRoleId(id: number) {
+        return this.repository.find({
             where: { roles: { id } },
             select: {
                 id: true,
@@ -18,5 +15,3 @@ class PermissionRepositoryClass extends Repository<Permission> {
         });
     }
 }
-
-export const PermissionRepository = new PermissionRepositoryClass();

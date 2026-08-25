@@ -12,7 +12,7 @@ export const jwtStrategy = new Strategy(
         if (payload.type !== 'access') {
             return done(null, false);
         }
-        const user = await UserRepository.findByIdWithAuthorization(Number(payload.sub));
+        const user = await UserRepository.findOneByIdWithAuthorization(Number(payload.sub));
         if (!user) {
             return done(null, false);
         }

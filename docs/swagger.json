@@ -210,7 +210,7 @@
 			"PostUserRequest": {
 				"$ref": "#/components/schemas/infer_typeofcreateUserSchema_"
 			},
-			"PatchUserResponse": {
+			"PutUserResponse": {
 				"$ref": "#/components/schemas/HttpResponse_UserResponse_"
 			},
 			"infer_typeofupdateUserSchema_": {
@@ -235,7 +235,7 @@
 				],
 				"type": "object"
 			},
-			"PatchUserRequest": {
+			"PutUserRequest": {
 				"$ref": "#/components/schemas/infer_typeofupdateUserSchema_"
 			},
 			"HttpResponse_undefined_": {
@@ -300,10 +300,10 @@
 				],
 				"type": "object"
 			},
-			"PatchCurrentUserResponse": {
+			"PutCurrentUserResponse": {
 				"$ref": "#/components/schemas/HttpResponse_UserResponse_"
 			},
-			"PatchCurrentUserRequest": {
+			"PutCurrentUserRequest": {
 				"$ref": "#/components/schemas/infer_typeofupdateUserSchema_"
 			},
 			"RolePermissionResponse": {
@@ -1074,7 +1074,7 @@
 					}
 				]
 			},
-			"patch": {
+			"put": {
 				"operationId": "UpdateUser",
 				"responses": {
 					"200": {
@@ -1082,7 +1082,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/PatchUserResponse"
+									"$ref": "#/components/schemas/PutUserResponse"
 								}
 							}
 						}
@@ -1112,7 +1112,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/PatchUserRequest"
+								"$ref": "#/components/schemas/PutUserRequest"
 							}
 						}
 					}
@@ -1178,7 +1178,7 @@
 				],
 				"parameters": []
 			},
-			"patch": {
+			"put": {
 				"operationId": "UpdateCurrentUser",
 				"responses": {
 					"200": {
@@ -1186,7 +1186,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/PatchCurrentUserResponse"
+									"$ref": "#/components/schemas/PutCurrentUserResponse"
 								}
 							}
 						}
@@ -1206,7 +1206,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/PatchCurrentUserRequest"
+								"$ref": "#/components/schemas/PutCurrentUserRequest"
 							}
 						}
 					}

@@ -1,14 +1,14 @@
-import { Repository } from 'typeorm';
 import { Role } from '../entities/Role';
 import { AppDataSource } from '../../../infrastructure/database/data-source';
+import { RoleEnum } from '../../../common/enum';
+import { DeepPartial } from 'typeorm';
 
-class RoleRepositoryClass extends Repository<Role> {
-    constructor() {
-        super(Role, AppDataSource.manager);
-    }
+export class RoleRepository {
+    private static readonly repository = AppDataSource.getRepository(Role);
 
-    async findPaginated(page: number, limit: number, name?: string) {
-        const query = this.createQueryBuilder('role')
+    public static async findPaginated(page: number, limit: number, name?: string) {
+        const query = this.repository
+            .createQueryBuilder('role')
             .select(['role.id', 'role.name', 'role.description'])
             .skip((page - 1) * limit)
             .take(limit)
@@ -22,8 +22,8 @@ class RoleRepositoryClass extends Repository<Role> {
         return query.getManyAndCount();
     }
 
-    async findById(id: number) {
-        return await this.findOne({
+    public static async findOneById(id: number) {
+        return await this.repository.findOne({
             where: { id },
             select: {
                 id: true,
@@ -33,9 +33,17 @@ class RoleRepositoryClass extends Repository<Role> {
         });
     }
 
-    async deleteById(id: number) {
-        return await this.delete({ id });
+    public static async findOneByName(name: RoleEnum) {
+        return await this.repository.findOneBy({
+            name,
+        });
+    }
+
+    public static async deleteById(id: number) {
+        return await this.repository.delete({ id });
+    }
+
+    public static async save(role: DeepPartial<Role>) {
+        return await this.repository.save(role);
     }
 }
-
-export const RoleRepository = new RoleRepositoryClass();
