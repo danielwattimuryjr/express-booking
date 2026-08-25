@@ -26,6 +26,12 @@ type AddressResponse = {
     };
 };
 
+type AmenityResponse = {
+    name: string;
+    description: string | null;
+    isActive: boolean;
+};
+
 type SearchHotelQuery = {
     name?: string;
 };
@@ -33,7 +39,9 @@ type SearchHotelQuery = {
 export type GetAllHotelResponse = HttpPaginateResponse<HotelResponse>;
 export type GetAllHotelQuery = PaginationQuery & SearchHotelQuery;
 
-export type GetOneHotelResponse = HttpResponse<HotelResponse & { address: AddressResponse }>;
+export type GetOneHotelResponse = HttpResponse<
+    HotelResponse & { address: AddressResponse; amenities: AmenityResponse[] }
+>;
 
 export type PostHotelRequest = z.infer<typeof createHotelSchema>;
 export type PostHotelResponse = HttpResponse<HotelResponse>;

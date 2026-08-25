@@ -1,16 +1,4 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Patch,
-    Path,
-    Post,
-    Query,
-    Route,
-    Security,
-    Tags,
-} from 'tsoa';
+import { Controller, Delete, Get, Patch, Path, Post, Query, Route, Security, Tags } from 'tsoa';
 import {
     DeleteHotelResponse,
     GetAllHotelResponse,
@@ -24,6 +12,8 @@ import { Authorize } from '../../../common/decorators/authorize';
 import { PermissionEnum } from '../../../common/enum';
 import { HotelService } from '../services/HotelService';
 import { StatusCodes } from 'http-status-codes';
+import { Body, ValidateBody } from '../../../common/decorators';
+import { createHotelSchema, updateHotelSchema } from '../schemas/HotelSchema';
 
 @Route('hotels')
 @Security('bearerAuth')
@@ -73,6 +63,7 @@ export class HotelController extends Controller {
         type: 'permission',
         values: [PermissionEnum.HOTEL_CREATE],
     })
+    @ValidateBody(createHotelSchema)
     public async postHotel(@Body() body: PostHotelRequest): Promise<PostHotelResponse> {
         const data = await HotelService.createHotel(body);
 
@@ -89,6 +80,7 @@ export class HotelController extends Controller {
         type: 'permission',
         values: [PermissionEnum.HOTEL_UPDATE],
     })
+    @ValidateBody(updateHotelSchema)
     public async patchHotel(
         @Path() hotelSlug: string,
         @Body() body: PatchHotelRequest,

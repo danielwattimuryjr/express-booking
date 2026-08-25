@@ -7,6 +7,7 @@ import { Role } from '../../modules/roles/entities/Role';
 import { TypeOrmWinstonLogger } from '../logger/TypeOrmLogger';
 import { Hotel } from '../../modules/hotels/entities/Hotel';
 import { HotelAddress } from '../../modules/hotels/entities/HotelAddress';
+import { Amenity } from '../../modules/hotels/entities/Amenity';
 
 export const AppDataSource = new DataSource({
     type: 'postgres',
@@ -18,7 +19,7 @@ export const AppDataSource = new DataSource({
     synchronize: config.NODE_ENV === 'production' ? false : true,
     logging: ['query', 'error', 'warn'],
     logger: new TypeOrmWinstonLogger(),
-    entities: [User, Role, RefreshToken, Permission, Hotel, HotelAddress],
+    entities: [User, Role, RefreshToken, Permission, Hotel, HotelAddress, Amenity],
     subscribers: [],
     migrations: [],
     cache: {

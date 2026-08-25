@@ -1,6 +1,7 @@
 import { logger } from '../../logger/Logger';
 import { AppDataSource } from '../data-source';
 import { seedAdmin } from './adminSeeder';
+import { seedAmenities } from './amenitySeeder';
 import { clearTablesData } from './clearTablesData';
 import { seedPermissions } from './permissionSeeder';
 import { seedRolePermissions } from './rolePermissionSeeder';
@@ -18,6 +19,7 @@ async function seed() {
         await seedRoles();
         await seedRolePermissions();
         await seedAdmin();
+        await seedAmenities();
 
         logger.debug('✅ Database seeded successfully');
     } catch (error) {

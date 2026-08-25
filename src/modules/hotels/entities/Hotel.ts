@@ -2,12 +2,15 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinTable,
+    ManyToMany,
     OneToOne,
     PrimaryGeneratedColumn,
     Relation,
     UpdateDateColumn,
 } from 'typeorm';
 import { HotelAddress } from './HotelAddress';
+import { Amenity } from './Amenity';
 
 @Entity({
     schema: 'public',
@@ -70,6 +73,20 @@ export class Hotel {
         cascade: true,
     })
     address!: Relation<HotelAddress>;
+
+    @ManyToMany(() => Amenity)
+    @JoinTable({
+        name: 'hotel_amenities',
+        joinColumn: {
+            name: 'hotel_id',
+            referencedColumnName: 'id',
+        },
+        inverseJoinColumn: {
+            name: 'amenity_id',
+            referencedColumnName: 'id',
+        },
+    })
+    amenities!: Relation<Amenity[]>;
 
     @CreateDateColumn({
         type: 'timestamp',

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Path, Put, Route, Security, Tags } from 'tsoa';
+import { Controller, Get, Path, Put, Route, Security, Tags } from 'tsoa';
 import { Authorize } from '../../../common/decorators/authorize';
 import { PermissionEnum } from '../../../common/enum';
 import { RolePermissionService } from '../services/RolePermissionService';
@@ -8,6 +8,8 @@ import {
     PutRolePermissionRequest,
     PutRolePermissionResponse,
 } from '../../../common/types';
+import { Body, ValidateBody } from '../../../common/decorators';
+import { updateRolePermissionSchema } from '../schemas/RolePermissionSchema';
 
 @Route('roles/{roleId}/permissions')
 @Tags('Roles & Permissions')
@@ -35,6 +37,7 @@ export class RolePermissionController extends Controller {
         type: 'permission',
         values: [PermissionEnum.ROLE_UPDATE],
     })
+    @ValidateBody(updateRolePermissionSchema)
     public async putRoleWithPermissions(
         @Path() roleId: number,
         @Body() body: PutRolePermissionRequest,

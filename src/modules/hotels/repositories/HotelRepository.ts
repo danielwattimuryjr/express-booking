@@ -1,15 +1,10 @@
-import { Repository } from 'typeorm';
 import { Hotel } from '../entities/Hotel';
 import { AppDataSource } from '../../../config/database';
-import { HotelQueryBuilder } from './HotelQueryBuilder';
 
-export class HotelRepositoryClass extends Repository<Hotel> {
-    constructor() {
-        super(Hotel, AppDataSource.manager);
-    }
-
-    public async findPaginated(page: number, limit: number, name?: string) {
-        const query = this.createQueryBuilder('hotel')
+export class HotelRepository {
+    public static async findPaginated(page: number, limit: number, name?: string) {
+        const query = AppDataSource.getRepository(Hotel)
+            .createQueryBuilder('hotel')
             .select([
                 'hotel.id',
                 'hotel.name',
@@ -32,9 +27,27 @@ export class HotelRepositoryClass extends Repository<Hotel> {
         return query.getManyAndCount();
     }
 
-    public queryOne() {
-        return new HotelQueryBuilder(this);
+    public static async findBySlug(slug: string) {
+        return AppDataSource.getRepository(Hotel).findOne({
+            where: {
+                slug,
+            },
+        });
+    }
+
+    public static async findBySlugWithDetails(slug: string) {
+        return AppDataSource.getRepository(Hotel).findOne({
+            where: {
+                slug,
+            },
+            relations: {
+                address: true,
+                amenities: true,
+            },
+        });
+    }
+
+    public static async remove(slug: string) {
+        await AppDataSource.getRepository(Hotel).delete({ slug });
     }
 }
-
-export const HotelRepository = new HotelRepositoryClass();

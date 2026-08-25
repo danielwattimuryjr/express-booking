@@ -1,4 +1,5 @@
 import z from 'zod';
+import { AmenityEnum } from '../../../common/enum';
 
 const locationSchema = z.object({
     latitude: z.number().min(-90).max(90),
@@ -21,7 +22,20 @@ export const createHotelSchema = z.object({
     email: z.email().max(50).optional(),
     phone: z.string().max(30).optional(),
     starRating: z.number().min(1).max(5).optional(),
+
     address: hotelAddressSchema,
+
+    amenityNames: z
+        .array(z.enum(AmenityEnum))
+        .min(1, 'At least one amenity is selected')
+        .superRefine((values, ctx) => {
+            if (new Set(values).size !== values.length) {
+                ctx.addIssue({
+                    code: 'custom',
+                    message: 'Duplicate amenities are not allowed',
+                });
+            }
+        }),
 });
 
 export const updateHotelSchema = z.object({
@@ -31,10 +45,18 @@ export const updateHotelSchema = z.object({
     phone: z.string().max(30).optional(),
     starRating: z.number().min(1).max(5).optional(),
     isActive: z.boolean('Hotel status is required').optional(),
-    address: hotelAddressSchema
-        .extend({
-            location: locationSchema.optional(),
+
+    address: hotelAddressSchema.partial().optional(),
+
+    amenityNames: z
+        .array(z.enum(AmenityEnum))
+        .superRefine((values, ctx) => {
+            if (new Set(values).size !== values.length) {
+                ctx.addIssue({
+                    code: 'custom',
+                    message: 'Duplicate amenities are not allowed',
+                });
+            }
         })
-        .partial()
         .optional(),
 });

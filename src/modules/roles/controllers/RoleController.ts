@@ -1,21 +1,9 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Patch,
-    Path,
-    Post,
-    Query,
-    Route,
-    Security,
-    Tags,
-} from 'tsoa';
+import { Controller, Delete, Get, Patch, Path, Post, Query, Route, Security, Tags } from 'tsoa';
 import { Authorize } from '../../../common/decorators/authorize';
 import { PermissionEnum } from '../../../common/enum';
 import { RoleService } from '../services/RoleService';
 import { StatusCodes } from 'http-status-codes';
-import { ValidateBody } from '../../../common/decorators';
+import { Body, ValidateBody } from '../../../common/decorators';
 import { roleRequestSchema } from '../schemas/RoleSchema';
 import {
     DeleteRoleResponse,
